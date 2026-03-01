@@ -31,6 +31,8 @@ Usage: switch to Agent mode, then type:
 
 **`/seo`** — Pre-launch SEO checklist. Auto-generates missing SEO files, then walks you through Google Search Console, Bing, and OG validation.
 
+**`/launch`** — Distribution checklist. Run after `/seo`. Audits and fixes sharing hooks, social footer links, dynamic OG images, and FAQPage schema. Then walks you through the launch day posting sequence: build log → Ship or Die → X → dev.to → HN → Reddit → Product Hunt (optional).
+
 Usage: type any slash command in chat.
 
 ## Hooks (auto-runs after edits)
@@ -58,13 +60,14 @@ Configured via `editor.formatOnSave: true` in `.vscode/settings.json`. Requires 
 │   ├── tool.prompt.md             ← /tool command (register/update tool on modrynstudio.com → PR)
 │   ├── deps.prompt.md             ← /deps command (update checker)
 │   ├── log.prompt.md              ← /log command (draft build log post → PR on modryn-studio-v2)
-│   └── seo.prompt.md              ← /seo command (SEO audit + registration)
+│   ├── seo.prompt.md              ← /seo command (SEO audit + registration)
+│   └── launch.prompt.md           ← /launch command (distribution: sharing hooks, social, community posting)
 .vscode/
 ├── settings.json                  ← Agent mode enabled, formatOnSave, Prettier as default formatter
 ├── extensions.json                ← Recommends Prettier extension on first open
 └── mcp.json                       ← MCP server config (GitHub only)
 src/config/
-└── site.ts                        ← Single source of truth: site name, URL, description, brand colors
+└── site.ts                        ← Single source of truth: site name, URL, description, brand colors, social links
 src/lib/
 ├── cn.ts                          ← Tailwind class merge utility (clsx + tailwind-merge)
 ├── route-logger.ts                ← API route logging utility (createRouteLogger)
@@ -80,7 +83,7 @@ development-principles.md          ← Permanent product philosophy — do not e
 
 1. Copy `.github/`, `.vscode/`, `src/lib/`, `src/config/`, and `scripts/` into the new project
 2. Run `npm install` — this installs Prettier automatically (it's in `devDependencies`)
-3. Fill in `context.md` — product idea, target user, stack additions, and routes
+3. Fill in `context.md` — product idea, target user, stack additions, routes, and this project's GitHub URL in Social Profiles
 4. Fill in `brand.md` — voice, visual rules, emotional arc, and copy examples
 5. Type `/init` — Copilot reads all three files and fills in `.github/copilot-instructions.md` + `src/config/site.ts`
 6. Drop your logomark and run the asset generator (see below)
