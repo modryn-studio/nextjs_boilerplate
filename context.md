@@ -22,8 +22,9 @@
 
 ## Social Profiles
 <!-- Your accounts — used by /init and /launch to populate site.ts social block and footer links.
-     Fill in what's relevant. Delete lines that don't apply. -->
+     twitter/devto/shipordie are universal — already filled in.
+     Update GitHub to this project's repo URL. -->
 - X/Twitter: https://x.com/lukehanner
-- GitHub: https://github.com/modryn-studio
-- Dev.to: https://dev.to/TODO
-- Ship or Die: https://shipordie.club/TODO
+- GitHub: https://github.com/TODO
+- Dev.to: https://dev.to/lukehanner
+- Ship or Die: https://shipordie.club/lukehanner
