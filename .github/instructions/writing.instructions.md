@@ -124,6 +124,8 @@ Description rules:
 - Plain language. What the post is about, not what the reader will "learn"
 - Avoid starting with "In this post..." or "I explore..."
 
+`seoTitle` (optional) — use when the post `title` is under ~35 characters (which would make the auto-generated `<title>` tag too short for Bing/Google). The `seoTitle` overrides only the `<title>` tag — the displayed `<h1>` stays as `title`. Target 55–65 characters; the ` | Build Log` suffix is NOT appended — `seoTitle` is the complete title tag value.
+
 ---
 
 ## Social Copy (reference — full rules in `.github/prompts/social.prompt.md`)
