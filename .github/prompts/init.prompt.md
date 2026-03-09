@@ -26,7 +26,7 @@ Also fill in `src/config/site.ts` — replace every `TODO:` placeholder with rea
 - `description` — 110–160 char meta description that describes what the product does and who it's for
 - `ogTitle` — 50–60 char title formatted as "Product Name | Short Value Prop"
 - `ogDescription` — 110–160 char OG description, slightly more marketing-forward than the meta description
-- `cta` -- short CTA button label (5--8 words) for the OG image pill; pull from brand's primary action or pricing copy (e.g. `'Get your plan for $9 \u2192'`, `'Start for free \u2192'`)
+- `cta` -- short CTA button label (5--8 words) for the OG image pill; pull from brand's primary action or pricing copy (e.g. `'Get your plan for $9 →'`, `'Start for free →'`)
 - `founder` — from context.md or default to "Luke Hanner"
 - `accent` / `bg` — brand colors from brand.md (hex values)
 - `social.twitter` / `social.twitterHandle` — X/Twitter profile URL and handle (e.g. `@lukehanner`) from the Social Profiles section of context.md
@@ -156,6 +156,22 @@ Wire `FeedbackWidget` and analytics into `src/app/layout.tsx`:
   no corresponding utilities.
 
 - This must be present in every project — it's how Luke collects feedback from day one
+
+---
+
+## Generate Brand Palette
+
+After globals.css is confirmed to have all 5 color tokens, run:
+
+```powershell
+.\scripts\generate-palette.ps1
+```
+
+This generates `public/brand/palette.png` — a visual swatch sheet of the brand colors.
+No logomark needed. Run this now so the palette reference exists before design work begins.
+
+If ImageMagick is not installed, tell Luke:
+> "Install ImageMagick from https://imagemagick.org, then run `.\scripts\generate-palette.ps1` to generate your palette swatch sheet."
 
 ---
 
