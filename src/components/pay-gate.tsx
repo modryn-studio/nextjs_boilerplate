@@ -1,9 +1,28 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore, useEffect, useState } from 'react';
 import { analytics } from '@/lib/analytics';
 
 const RECEIPT_KEY = 'payment_receipt';
+const RECEIPT_EVENT = 'receipt-stored';
+
+function subscribeToReceipt(cb: () => void) {
+  // storage = cross-tab; receipt-stored = same-tab (dispatched after localStorage.setItem)
+  window.addEventListener('storage', cb);
+  window.addEventListener(RECEIPT_EVENT, cb);
+  return () => {
+    window.removeEventListener('storage', cb);
+    window.removeEventListener(RECEIPT_EVENT, cb);
+  };
+}
+
+function getReceiptSnapshot() {
+  return !!localStorage.getItem(RECEIPT_KEY);
+}
+
+function getReceiptServerSnapshot() {
+  return false;
+}
 
 interface PayGateProps {
   /** Content shown to users who have paid */
@@ -36,30 +55,22 @@ interface PayGateProps {
  * in localStorage and reveals the content. No accounts, no database.
  */
 export default function PayGate({ children, valueProposition, price, checkoutUrl }: PayGateProps) {
-  const [hasPaid, setHasPaid] = useState(false);
+  const hasPaid = useSyncExternalStore(
+    subscribeToReceipt,
+    getReceiptSnapshot,
+    getReceiptServerSnapshot
+  );
   const [loading, setLoading] = useState(false);
-  const [checking, setChecking] = useState(true);
 
+  // Side effects only — no setState. useSyncExternalStore picks up the localStorage write via the receipt-stored event.
   useEffect(() => {
-    // Check localStorage for existing receipt
-    const receipt = localStorage.getItem(RECEIPT_KEY);
-    if (receipt) {
-      setHasPaid(true);
-      setChecking(false);
-      return;
-    }
-
-    // Check URL params for return from Stripe
     const params = new URLSearchParams(window.location.search);
-    if (params.get('paid') === 'true') {
+    if (params.get('paid') === 'true' && !localStorage.getItem(RECEIPT_KEY)) {
       localStorage.setItem(RECEIPT_KEY, new Date().toISOString());
-      setHasPaid(true);
+      window.dispatchEvent(new Event(RECEIPT_EVENT));
       analytics.track('payment_gate', { action: 'payment_completed' });
-      // Clean up URL
       window.history.replaceState({}, '', window.location.pathname);
     }
-
-    setChecking(false);
   }, []);
 
   const handleCheckout = async () => {
@@ -88,7 +99,6 @@ export default function PayGate({ children, valueProposition, price, checkoutUrl
     }
   };
 
-  if (checking) return null;
   if (hasPaid) return <>{children}</>;
 
   return (
