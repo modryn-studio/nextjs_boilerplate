@@ -92,6 +92,21 @@ if (Test-Path $siteTs) {
     }
 }
 
+# -- Compute banner text color from bg luminance --------------------------------
+# Relative luminance (sRGB): L = 0.2126R + 0.7152G + 0.0722B (linearized)
+# Use dark text on light backgrounds, light text on dark backgrounds.
+function Get-TextColor([string]$hex) {
+    $hex = $hex.TrimStart('#')
+    if ($hex.Length -eq 3) { $hex = "$($hex[0])$($hex[0])$($hex[1])$($hex[1])$($hex[2])$($hex[2])" }
+    $r = [Convert]::ToInt32($hex.Substring(0,2),16) / 255.0
+    $g = [Convert]::ToInt32($hex.Substring(2,2),16) / 255.0
+    $b = [Convert]::ToInt32($hex.Substring(4,2),16) / 255.0
+    $toLinear = { param($c) if ($c -le 0.04045) { $c/12.92 } else { [Math]::Pow(($c+0.055)/1.055, 2.4) } }
+    $L = 0.2126 * (& $toLinear $r) + 0.7152 * (& $toLinear $g) + 0.0722 * (& $toLinear $b)
+    if ($L -gt 0.179) { return "#1C1410" } else { return "#F5F5F5" }
+}
+$textColor = Get-TextColor $bgColor
+
 Write-Host ""
 Write-Host "  Generating assets - site: $siteName" -ForegroundColor Cyan
 Write-Host ""
@@ -108,13 +123,13 @@ $negateFrag  = if ($isGrayscale) { @('-channel', 'RGB', '-negate') } else { @() 
 
 # -- icon.png - browser tab favicon --------------------------------------------
 # Transparent. No background. No compositing.
-# The browser renders it on whatever bg the OS/browser uses for tabs.
-magick $logomark -background none -trim +repage -resize 1024x1024 "src\app\icon.png"
+# Pad to square after trim so non-square marks don't stretch in browser tabs.
+magick $logomark -background none -trim +repage -resize 1024x1024 -gravity Center -background none -extent 1024x1024 "src\app\icon.png"
 Write-Host "  + src/app/icon.png"
 
 # -- favicon.ico - legacy multi-resolution -------------------------------------
-# Transparent. No background.
-magick $logomark -background none -trim +repage -define icon:auto-resize=48,32,16 "src\app\favicon.ico"
+# Transparent. Squarify before multi-res render to prevent browser stretching.
+magick $logomark -background none -trim +repage -resize 256x256 -gravity Center -background none -extent 256x256 -define icon:auto-resize=48,32,16 "src\app\favicon.ico"
 Write-Host "  + src/app/favicon.ico"
 
 # -- apple-icon.png - iOS home screen ------------------------------------------
@@ -147,6 +162,7 @@ Write-Host "  + public/icon-dark.png"
 
 # -- banner.png - README header ------------------------------------------------
 # Auto-generated only if not already provided by the user.
+# Text color is computed from bg luminance - dark text on light bg, light on dark.
 if (Test-Path $banner) {
     Write-Host "  ~ public/brand/banner.png (skipped - file already exists)"
 } else {
@@ -154,7 +170,7 @@ if (Test-Path $banner) {
     magick -size 1280x320 xc:"$bgColor" `
         '(' $logomark -background none -trim +repage $negateFrag -resize 160x160 ')' `
         -gravity West -geometry +100+0 -composite `
-        -gravity West -font "Arial-Bold" -pointsize 72 -fill "#e5e5e5" -annotate +300+0 $siteName `
+        -gravity West -font "Arial-Bold" -pointsize 72 -fill "$textColor" -annotate +300+0 $siteName `
         $banner
     Write-Host "  + public/brand/banner.png (auto-generated)"
 }
