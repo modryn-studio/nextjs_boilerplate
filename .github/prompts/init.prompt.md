@@ -1,4 +1,4 @@
-﻿---
+---
 name: init
 description: Reads context.md, development-principles.md, and brand.md, then fills in copilot-instructions.md and site.ts for a new project
 agent: agent
@@ -110,10 +110,24 @@ Use when you need dynamic pricing, coupons, or programmatic control.
 
 ---
 
-Finally, wire `FeedbackWidget` into `src/app/layout.tsx`:
+## Wire Layout (FeedbackWidget + Analytics)
 
-- Add `import FeedbackWidget from '@/components/feedback-widget'` with the other component imports
-- Add `<FeedbackWidget />` as the last child inside `<body>`, before `</body>`
+Wire `FeedbackWidget` and analytics into `src/app/layout.tsx`:
+
+- Add these imports at the top:
+  ```tsx
+  import { Analytics } from '@vercel/analytics/next';
+  import { GoogleAnalytics } from '@next/third-parties/google';
+  import FeedbackWidget from '@/components/feedback-widget';
+  ```
+- Add `<Analytics />` and `<FeedbackWidget />` as the last children inside `<body>`, before `</body>`
+- Add `<GoogleAnalytics>` **outside** `<body>` but inside `<html>`, conditioned on the env var:
+  ```tsx
+  {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+    <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+  )}
+  ```
+  Do NOT use raw `<script>` tags for GA — `GoogleAnalytics` from `@next/third-parties/google` is the correct Next.js 15/16 approach.
 - The widget uses CSS custom properties (`--color-border`, `--color-surface`, `--color-accent`, etc.).
   Verify these exist in `globals.css` inside an `@theme` block — **not** `:root`.
   If `globals.css` doesn't exist, create it with:
@@ -143,5 +157,24 @@ Finally, wire `FeedbackWidget` into `src/app/layout.tsx`:
 
 - This must be present in every project — it's how Luke collects feedback from day one
 
-After editing, confirm what was filled in and flag anything that was missing from context.md or brand.md that Luke should provide.
+---
 
+## Create .env.local
+
+Check if `.env.local` already exists. If it does not:
+
+- Run this command in the terminal:
+  ```powershell
+  Copy-Item .env.local.example .env.local
+  ```
+- All values will be blank. Flag each one Luke needs to fill in before the app will work:
+  - `NEXT_PUBLIC_GA_MEASUREMENT_ID` — from Google Analytics → Admin → Data Streams
+  - `GMAIL_USER` / `GMAIL_APP_PASSWORD` — Gmail address + App Password (not account password)
+  - `RESEND_API_KEY` / `RESEND_SEGMENT_ID` — from resend.com → API Keys / Segments
+  - `STRIPE_SECRET_KEY` / `STRIPE_PUBLISHABLE_KEY` / `STRIPE_PRICE_ID` — from stripe.com → Developers → API Keys (only if monetization is `one-time-payment`)
+
+If `.env.local` already exists, skip this step.
+
+---
+
+After editing, confirm what was filled in and flag anything that was missing from context.md or brand.md that Luke should provide.
