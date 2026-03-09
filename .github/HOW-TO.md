@@ -19,6 +19,13 @@ Run these once when starting a new project.
 5. **Fill `context.md` and `brand.md`** — two paths:
    - **Starting from scratch** → Open chat (`Ctrl+Alt+I`), select **Agent** mode, pick **@prebuilt**. Describe the idea. It researches, validates, and fills both docs when you say "fill it in."
    - **Docs already filled** → Drop your pre-filled `context.md` and `brand.md` into the project root, replacing the stubs. Skip to step 6.
+
+   > **Brand completeness check** — before running `/validate`, confirm `brand.md` has:
+   > - [ ] All 5 color slots filled (`## Color System`)
+   > - [ ] Logomark direction answered (`## Logomark`)
+   >
+   > These unlock coherent feedback from `/validate` and prevent visual discovery from happening post-`/init`. If either is missing, finish it now — not after the code is scaffolded.
+
 6. Run `/validate` — web-searches competitors, user pain, SEO opportunity, and brand positioning. Review the report and iterate on docs if needed.
 7. Type `/init` — reads all three source docs, fills in `copilot-instructions.md` + `src/config/site.ts`
 8. Drop your logomark at `public/brand/logomark.png` and type `/assets` — generates all favicons, icons, and banner
