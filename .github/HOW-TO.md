@@ -24,7 +24,7 @@ One-time setup. Run these in order when starting a new project.
 5. Run `npm install`
 6. If you used `@prebuilt`, docs are already filled. If you wrote your own docs, replace the boilerplate stubs with yours now.
 7. Run `/validate` — web-searches competitors, user pain, SEO opportunity, and brand positioning. Go back and forth. Update `context.md` and `brand.md` based on findings.
-8. Type `/init` — reads source docs, fills in `copilot-instructions.md` + `src/config/site.ts`. Start the dev server (`Ctrl+Shift+B`) and check the basic landing page in your browser.
+8. Type `/setup` — reads source docs, fills in `copilot-instructions.md` + `src/config/site.ts`. Start the dev server (`Ctrl+Shift+B`) and check the basic landing page in your browser.
 9. Create or drop your logomark at `public/brand/logomark.png`. Verify the favicon shows up in the browser tab.
 10. Run `/assets` — generates all favicons, icons, and banner. Push to `main`.
 11. Run `/deps` — validates all dependencies against live docs, surfaces breaking API changes.
@@ -139,7 +139,7 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 
 | Command     | Frequency | What it does                                                                 |
 | ----------- | --------- | ---------------------------------------------------------------------------- |
-| `/init`     | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs                 |
+| `/setup`    | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs                 |
 | `/update`   | Reusable  | Cascades source doc edits into derived files                                 |
 | `/validate` | Reusable  | Validates context + brand against live data. Use focused: "validate X"       |
 | `/assets`   | Reusable  | Generates favicons, icons, banner from logomark                              |
@@ -161,6 +161,10 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 - **After Phase 4 implementations** — ready for users? (required)
 - **Before any push you're unsure about** — best practice
 - **Takes ~10 minutes** — let it run, don't interrupt
+
+> **Before running `@check`:** Switch the chat permissions picker to **Bypass Approvals** (bottom of the Chat view, next to the model selector). This lets `@check` auto-confirm file edits and terminal commands without interrupting for approval — which is exactly what it needs to run end-to-end. Switch back to Default Approvals when done.
+>
+> There's no way to set this programmatically — it's a per-session UI setting only. No frontmatter field, no hook, no command can trigger it. The step is: open Chat → switch to Bypass Approvals → invoke `@check`.
 
 ### `/validate` — Two Modes
 
@@ -227,7 +231,7 @@ Or run directly (requires [ImageMagick](https://imagemagick.org)):
 │   ├── check.agent.md             ← @check agent (quality gate — reusable)
 │   └── prebuilt.agent.md          ← @prebuilt agent (pre-build discovery)
 ├── prompts/
-│   ├── init.prompt.md             ← /init (once)
+│   ├── setup.prompt.md            ← /setup (once)
 │   ├── update.prompt.md           ← /update (reusable)
 │   ├── validate.prompt.md         ← /validate (reusable)
 │   ├── assets.prompt.md           ← /assets (reusable)
@@ -254,6 +258,6 @@ development-principles.md          ← SOURCE OF TRUTH: product philosophy (perm
 strategy.md                        ← SOURCE OF TRUTH: monetization, distribution, launch playbook (permanent)
 ```
 
-> **Tip:** To debug why a prompt or instruction isn't loading, open the Agent Debug panel: `Command Palette → Developer: Open Agent Debug Panel`. Shows system prompts, tool calls, and every customization loaded for the session. Replaces the old Diagnostics gear menu.
+> **Tip:** To debug why a prompt or instruction isn't loading, open the Agent Debug panel: `Command Palette → Developer: Open Agent Debug Panel`. Shows system prompts, tool calls, and every customization loaded for the session. You can also type `#debugEventsSnapshot` in chat to attach a live snapshot of agent debug events directly into your message — then ask Copilot to explain what's loaded, what's missing, or why something isn't firing. Faster than reading the raw panel logs.
 
 > **Tip:** After any session where you corrected Copilot on a boilerplate pattern, type `/create-instruction` to turn those corrections into a persistent `.instructions.md` file. Save it to `.github/instructions/` so it travels with the boilerplate. For multi-step procedures (e.g. a fix workflow), `/create-skill` packages it as a reusable runbook instead.
