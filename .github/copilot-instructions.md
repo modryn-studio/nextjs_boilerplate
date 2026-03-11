@@ -158,7 +158,7 @@ import { analytics } from '@/lib/analytics';
 analytics.track('event_name', { prop: value });
 ```
 
-Do not add GA4 or PostHog without explicit instruction — keep it simple.
+**Vercel plan check required before adding custom events.** Custom events require Vercel Pro ($20/mo) — they do not appear in the Vercel Analytics dashboard on Hobby. Adding real event calls without an upgraded plan creates dead code that misleads future readers. Before instrumenting scroll depth, click events, conversion tracking, screenshot views, or any custom event: confirm the plan. If on Hobby, keep `analytics.ts` as a no-op stub until the plan is upgraded or a different provider is explicitly wired in. Do not add GA4 or PostHog without explicit instruction — keep it simple.
 
 ## Dev Server
 
