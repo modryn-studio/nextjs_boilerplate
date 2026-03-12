@@ -130,10 +130,11 @@ Run **`@check`** as a quality gate. Then push.
 You have a working core feature. Now loop: ship → validate → distribute → repeat.
 
 1. Run **`@check`** — quality gate after implementation.
-2. Run `/tool` — update the tool listing (flip status to `live` when ready). Merge the PR.
-3. Run `/log` — document what you shipped. Each log post is content and distribution. Merge the PR.
-4. Run `/social` (from modryn-studio-v2) if the milestone is worth announcing.
-5. **Repeat Phase 4–5** until your first paying user.
+2. Run `/polish` — UI consistency sweep. Ensures all interactive elements use shared primitives, brand tokens are applied consistently, responsive spacing is correct, mobile keyboard safety is wired, and touch targets meet minimums.
+3. Run `/tool` — update the tool listing (flip status to `live` when ready). Merge the PR.
+4. Run `/log` — document what you shipped. Each log post is content and distribution. Merge the PR.
+5. Run `/social` (from modryn-studio-v2) if the milestone is worth announcing.
+6. **Repeat Phase 4–5** until your first paying user.
 
 **Milestones that earn a `/log` post:**
 
@@ -168,6 +169,7 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 | `/deps`     | Reusable  | Validates dependencies against live docs                                                                                                                              |
 | `/seo`      | Once      | SEO audit + Search Console + Bing setup                                                                                                                               |
 | `/launch`   | Once      | Distribution checklist: sharing hooks, OG, social prep                                                                                                                |
+| `/polish`   | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets                                                                              |
 | `@check`    | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                          |
 | `@prebuilt` | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md`                                                                                               |
 
@@ -243,23 +245,25 @@ Or run directly (requires [ImageMagick](https://imagemagick.org)):
 
 ```
 .github/
-├── copilot-instructions.md        ← Always-on context (derived — edit source docs, not this)
+├── copilot-instructions.md          ← Always-on context (derived — edit source docs, not this)
 ├── instructions/
-│   ├── nextjs.instructions.md     ← Auto-applied to .ts/.tsx files
-│   └── seo.instructions.md        ← Auto-applied to .ts/.tsx files
+│   ├── nextjs.instructions.md       ← Auto-applied to .ts/.tsx files
+│   ├── seo.instructions.md          ← Auto-applied to .ts/.tsx files
+│   └── design-system.instructions.md ← Auto-applied to .tsx files (primitives, brand tokens, responsive)
 ├── agents/
-│   ├── check.agent.md             ← @check agent (quality gate — reusable)
-│   └── prebuilt.agent.md          ← @prebuilt agent (pre-build discovery)
+│   ├── check.agent.md               ← @check agent (quality gate — reusable)
+│   └── prebuilt.agent.md            ← @prebuilt agent (pre-build discovery)
 ├── prompts/
-│   ├── setup.prompt.md            ← /setup (once)
-│   ├── update.prompt.md           ← /update (reusable)
-│   ├── validate.prompt.md         ← /validate (reusable)
-│   ├── assets.prompt.md           ← /assets (reusable)
-│   ├── tool.prompt.md             ← /tool (reusable)
-│   ├── deps.prompt.md             ← /deps (reusable)
-│   ├── log.prompt.md              ← /log (reusable)
-│   ├── seo.prompt.md              ← /seo (once)
-│   └── launch.prompt.md           ← /launch (once)
+│   ├── setup.prompt.md              ← /setup (once)
+│   ├── update.prompt.md             ← /update (reusable)
+│   ├── validate.prompt.md           ← /validate (reusable)
+│   ├── assets.prompt.md             ← /assets (reusable)
+│   ├── tool.prompt.md               ← /tool (reusable)
+│   ├── deps.prompt.md               ← /deps (reusable)
+│   ├── log.prompt.md                ← /log (reusable)
+│   ├── seo.prompt.md                ← /seo (once)
+│   ├── launch.prompt.md             ← /launch (once)
+│   └── polish.prompt.md             ← /polish (reusable)
 .vscode/
 ├── settings.json                  ← Agent mode, formatOnSave, Prettier default formatter
 ├── extensions.json                ← Recommends Prettier on first open
@@ -270,6 +274,10 @@ src/lib/
 ├── cn.ts                          ← Tailwind class merge utility
 ├── route-logger.ts                ← API route logging (createRouteLogger)
 └── analytics.ts                   ← Vercel Analytics event tracking (analytics.track)
+src/components/ui/
+├── button.tsx                     ← Shared button primitive (3 variants, 3 sizes)
+├── input.tsx                      ← Shared input primitive (forwardRef)
+└── textarea.tsx                   ← Shared textarea primitive (forwardRef)
 scripts/
 └── generate-assets.ps1            ← Asset generator (run via /assets)
 context.md                         ← SOURCE OF TRUTH: product, stack, routes, monetization
