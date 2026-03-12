@@ -4,6 +4,12 @@ import { cn } from '@/lib/cn';
 type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
+// Token contract — define these in your project's globals.css @theme:
+//   --color-accent    primary action color (bg-accent)
+//   --color-surface   elevated/card background (bg-surface)
+//   --color-border    default border color (border-border)
+//   --color-text      body text (text-text)
+//   --color-muted     secondary/dimmed text (text-muted)
 const variantClasses: Record<ButtonVariant, string> = {
   primary: 'bg-accent text-white hover:opacity-90 disabled:opacity-50',
   secondary:
@@ -33,7 +39,7 @@ export function Button({
     <button
       type={type}
       className={cn(
-        'focus-visible:ring-accent/30 rounded-full font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed',
+        'inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors focus-visible:ring-accent/30 focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed',
         variantClasses[variant],
         sizeClasses[size],
         className
