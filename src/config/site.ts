@@ -16,6 +16,7 @@ export const site = {
   ogDescription: 'TODO: OG description (110–160 chars)',
   cta: 'TODO: CTA pill text (5-8 words, e.g. Get started free)', // used in OG images
   founder: 'Luke Hanner',
+  email: 'hello@DOMAIN.com', // TODO: contact email — set up forwarding in Vercel Dashboard → Domains → Email
   // Waitlist section copy — shown in the EmailSignup component on the landing page.
   // /init fills these in from context.md + brand.md. Never leave as TODO in production.
   waitlist: {
