@@ -5,16 +5,17 @@ type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 // Token contract — define these in your project's globals.css @theme:
-//   --color-accent    primary action color (bg-accent)
-//   --color-surface   elevated/card background (bg-surface)
-//   --color-border    default border color (border-border)
-//   --color-text      body text (text-text)
-//   --color-muted     secondary/dimmed text (text-muted)
+//   --color-accent             primary action color (bg-accent)
+//   --color-accent-foreground  text on accent bg (text-accent-foreground)
+//   --color-card               elevated/card background (bg-card)
+//   --color-foreground         body text (text-foreground)
+//   --color-muted-foreground   secondary/dimmed text (text-muted-foreground)
+//   --color-border             default border color (border-border)
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-white hover:opacity-90 disabled:opacity-50',
+  primary: 'bg-accent text-accent-foreground hover:opacity-90 disabled:opacity-50',
   secondary:
-    'border-border bg-surface text-text border hover:border-accent hover:text-accent disabled:opacity-50',
-  ghost: 'text-muted hover:text-text disabled:opacity-50',
+    'border-border bg-card text-foreground border hover:border-accent hover:text-accent disabled:opacity-50',
+  ghost: 'text-muted-foreground hover:text-foreground disabled:opacity-50',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
