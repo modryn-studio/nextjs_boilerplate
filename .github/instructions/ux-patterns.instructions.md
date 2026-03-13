@@ -1,6 +1,6 @@
 ---
 name: "UX Patterns"
-description: "Client-side UX patterns for forms, textarea behavior, and animations"
+description: "Client-side UX patterns for forms and textarea behavior"
 applyTo: "**/*.tsx"
 ---
 # UX Patterns
@@ -65,26 +65,3 @@ Rules:
 - Set `min-h-*` for the floor — collapse to one line looks broken
 - Always add `resize-none` and `overflow-hidden` — the JS handles growth
 - Reset `height = 'auto'` before measuring `scrollHeight` or shrinking won't work
-
-## New Message / Item Animations
-
-When dynamically appending items to a list (chat messages, steps, cards), animate new items in. Silent additions feel like UI bugs.
-
-Add to `globals.css`:
-```css
-@keyframes msg-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.msg-in { animation: msg-in 0.25s ease-out both; }
-```
-
-Apply `msg-in` to every rendered item (not conditionally). On initial render this is nearly instant — it only reads as animation for items added after mount.
-
-```tsx
-{messages.map((msg) => (
-  <div key={msg.id} className="msg-in ...">
-    {msg.content}
-  </div>
-))}
-```
