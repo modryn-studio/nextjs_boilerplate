@@ -1,5 +1,26 @@
 # Project Context
 
+## Core Framework
+<!-- The three decisions that justify building this. Fill these in before writing a single line of code.
+     If you can't fill these in, you don't have a product yet — you have a hypothesis.
+
+     1. Market you care about:
+        A market you already understand from experience, frustration, or obsession.
+
+     2. What people already pay for in this market:
+        A product (or service) with proven demand. Name it. Note the price. Note the top complaint.
+        You are not guessing — you looked this up. Cite a source.
+
+     3. Your differentiation (your signature):
+        The one thing you do differently. This is the only creative decision in the framework.
+        "Same job, for a different person" counts. "Same thing, without the worst thing" counts.
+        Avoid: "better", "faster", "cheaper" without a specific mechanism.
+-->
+
+Market:
+Reference product (what people pay for):
+Your angle:
+
 ## Product
 <!-- What is this product? One or two sentences. -->
 
