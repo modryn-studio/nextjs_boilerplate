@@ -31,10 +31,9 @@ Leverage these tools in every project:
 
 ## Distribution
 
-- **pSEO is the long game** - Programmatic SEO pages (e.g. "best X for Y", comparison pages) compound over 2–4 months. Plant seeds at launch, harvest later.
-- **Reddit first, X second** - Reddit drives qualified traffic on launch day. X builds founder brand over time. Prioritize Reddit posts in niche subreddits where the target user already complains.
-- **Every product launches on modrynstudio.com** - The studio domain aggregates authority. Individual domains are exceptions (pre-existing brands only).
+- **Distribution is the moat, not dev speed.** See `strategy.md` for the full operational playbook — Reddit, pSEO, X, launch timeline, and domain strategy.
 - **Build log is distribution** - Every `/log` post is content that can be cross-posted to dev.to, shared on Reddit, and linked from X. The build log IS the content marketing strategy.
+- **Show, don't just tell in log posts** - Every post that ships a visible feature must include a screenshot or screen recording (GIF). Drop the file in `public/log/[slug]-demo.gif` and reference it with `![demo](/log/slug-demo.gif)`. Cover images go in `public/log/covers/` — generate them with `node scripts/gen-cover.mjs --slug <slug>`. Callout boxes use `<div class="callout">key insight</div>`. Diagrams use fenced ` ```mermaid ``` ` blocks.
 
 ## User Experience
 
