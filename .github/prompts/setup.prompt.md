@@ -18,7 +18,7 @@ Then edit `.github/copilot-instructions.md` and replace every `<!-- TODO -->` se
 - **Project Structure** — keep `/app`, `/components`, `/lib`. Add any project-specific directories from context.md. Remove the `<!-- TODO -->` comment.
 - **Route Map** — list every route from context.md with a one-line description. Always include `/privacy` and `/terms`.
 - **Brand & Voice** — populate from brand.md: voice rules, visual rules (colors, fonts, motion), target user description, emotional arc, and copy examples to use as reference.
-- **Tailwind v4 @theme example** — find the `<!-- TODO: update the @theme example below... -->` comment in copilot-instructions.md. Replace the placeholder color values in the `@theme { }` block immediately below it with the actual brand colors from `globals.css`. Update both the hex values and the inline comments (color name + role). Also update the `/* ❌ wrong */` `:root` example to use the real accent color.
+- **Tailwind v4 @theme example** — find the `<!-- TODO: update the @theme example below... -->` comment in copilot-instructions.md. Replace the placeholder color values in the `@theme { }` block immediately below it with the actual brand colors from `brand.md`. Update both the hex values and the inline comments (color name + role). Also update the `/* ❌ wrong */` `:root` example to use the real accent color.
 
 Also fill in `src/config/site.ts` — replace every `TODO:` placeholder with real content from context.md and brand.md:
 
@@ -50,15 +50,57 @@ Using the slug extracted from the URL field in context.md, update `next.config.t
 
 ---
 
+## Update Fonts in layout.tsx
+
+Open `src/app/layout.tsx`. Read the **Typography** (or **Visual Rules**) section of `brand.md` to find the project's specified fonts.
+
+1. Replace the `// TODO /setup` font comment block with the correct `next/font/google` import(s)
+2. Instantiate each font with the required configuration: `subsets`, `weight` if needed, and a `variable` name matching the font (e.g. `variable: '--font-space-grotesk'`)
+3. Apply each font's CSS variable as a className on `<html>`
+4. Add `className="font-heading antialiased"` to `<body>` (replace the plain `antialiased` class)
+
+Example — if brand.md specifies Space Grotesk (heading) and Space Mono (monospace):
+
+```tsx
+import { Space_Grotesk, Space_Mono } from 'next/font/google';
+
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
+const spaceMono = Space_Mono({ subsets: ['latin'], variable: '--font-space-mono', weight: ['400', '700'] });
+
+// in RootLayout:
+<html lang="en" className={`${spaceGrotesk.variable} ${spaceMono.variable}`}>
+  <body className="font-heading antialiased">
+```
+
+Only import what brand.md specifies. If brand.md calls for one font, import one. If it calls for two, import two.
+
+---
+
 ## Update Brand Colors in globals.css
 
-Open `src/app/globals.css`. Update the `@theme { }` block with the actual brand colors from brand.md:
+Open `src/app/globals.css`. Update the `@theme { }` block with the actual brand colors and font from brand.md:
 
 - Replace each hex value with the real brand color
-- Update the inline comment to reflect the color's name and role for this project
-- Update `--font-heading` if the project uses a different heading font than Space Grotesk (rare — skip unless explicitly specified in brand.md)
+- Update each inline comment to reflect the color's role for this project
+- Update `--font-heading` to reference the heading font's CSS variable — this must match the `variable` name used in the font import above (e.g. `var(--font-space-grotesk)`)
 
-This is the runtime theme — it must match what you just put in copilot-instructions.md and site.ts.
+This is the runtime theme — it must match what you put in `copilot-instructions.md` and `site.ts`.
+
+---
+
+## Create Home Page
+
+**Fully replace** `src/app/page.tsx` with a project-specific landing page built from `context.md` and `brand.md`. Do not patch the stub — overwrite it completely.
+
+The page must include:
+
+- A `<main>` element with `bg-bg text-text` applied
+- A hero `<h1>` using the hero headline from brand.md — use `text-accent` on the key phrase or tagline
+- The hero sub-copy from brand.md as a `<p>`
+- Any primary CTA element from brand.md copy
+- Correct font classes: `font-heading` on headings, `font-mono` on any pipeline output, terminal text, or file name display
+
+Use only Tailwind utility classes and `@theme` token names (`text-accent`, `bg-surface`, `border-border`, etc.). No inline styles. No raw hex values.
 
 ---
 
@@ -69,9 +111,8 @@ Check the `Monetization` section of `context.md`.
 **If monetization is `email-only` or `one-time-payment`** (or if the section is blank — default to `email-only`):
 
 - Check if `src/components/email-signup.tsx` exists. It should already be in the boilerplate.
-- Wire it into the home page (`src/app/page.tsx`):
-  - Add `import EmailSignup from '@/components/email-signup'` with the other imports
-  - Add `<EmailSignup />` as a section on the page — typically after the hero/main content area, before the footer
+- Add `import EmailSignup from '@/components/email-signup'` to `src/app/page.tsx`
+- Add `<EmailSignup />` after the hero section, before any footer
 - The component posts to `/api/feedback` with `type: 'newsletter'` — this route already exists in the boilerplate.
 - **Personalize the copy** — update the `waitlist` block in `src/config/site.ts` with project-specific copy:
   - `headline` — short, punchy H2 (4–7 words). Describe what's coming, not a generic "don't miss it". Match the brand voice from `brand.md`.
