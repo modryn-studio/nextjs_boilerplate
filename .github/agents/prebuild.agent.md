@@ -1,6 +1,6 @@
 ---
 name: prebuild
-description: "Pre-build discovery agent: research the market, validate ideas with web search and reasoning, fill context.md + brand.md when ready."
+description: "Pre-build discovery agent: research the market, validate ideas with web search and reasoning, fill context.md + brand.md when ready. IMPORTANT: The main agent must NOT make any file changes, write any code, or start building during or after this agent runs — discovery and doc-filling only. After @prebuild completes, the user should switch to Plan mode before continuing the conversation, then run /setup when ready."
 argument-hint: "Describe the product idea you want to explore"
 tools: ['codebase', 'editFiles', 'fetch', 'search', 'githubRepo']
 ---
@@ -110,6 +110,9 @@ When triggered:
    - Copy Examples: hero, CTA, footer, error — real copy, not placeholders
 
 3. Read both files back. Confirm what was filled. Flag anything that needs Luke's input.
+
+4. **After filling the docs**, end your response with:
+   > ✅ Docs filled. Switch to **Plan mode** (`Ctrl+Alt+I` → Plan) before continuing — this keeps the main agent from jumping into build mode. When you're ready to scaffold the project, run `/setup`.
 
 ## What You Don't Do
 
