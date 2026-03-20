@@ -18,6 +18,8 @@
 - **Start small. Don't think big.** - Ship one killer feature, not ten mediocre ones. Launch in days, not weeks.
 - **Your enemy is perfection, BUT the first prototype must function really well** - Ugly is acceptable. Broken is not. Polish the core action ruthlessly.
 - **Old World (Human Developer) = months to MVP. New World (AI-Assisted) = days to MVP** - Use time saved for user research and distribution, not more features. Speed is table stakes now — everyone ships fast. The edge is what you do with the time you save.
+- **Email = curiosity. Pre-order = validation.** If there's a paid tier planned, put a founding member price on the landing page before committing to the full build. Even $4.99 proves someone will exchange money, not just attention. The first payment is the real signal — not the waitlist signup. Worst case: zero buyers, and you learned something before writing a line of core product code.
+- **Call your early buyers before you build deep.** Pre-orders prove clicks, not retention. Get on a call with every person who paid or seriously expressed intent. Ask: what's their current system, what have they tried, what made them act? The real product core surfaces here — not from what you assumed you'd build.
 
 ## AI-First Development
 
@@ -28,6 +30,21 @@ Leverage these tools in every project:
 3. **Agent-to-Agent Workflows** - Build autonomous multi-agent systems
 4. **SDKs** - Let users extend your product
 5. **Newest AI Tools** - Stay on the bleeding edge, rebuild when better tools emerge
+
+## Landing Page vs. Feature — Sequencing
+
+**Default: build the feature first.** The basic landing page from setup is enough for warm-traffic acquisition (log readers, social followers). Don't touch it. Build the killer feature and use real product output as the landing page upgrade after the loop runs.
+
+**Exception: if you already have demonstrable output, put it on the page first.** Existing examples, manual results, or recordings of the thing working are proof — not polish. They go on the page before you build the ordering/delivery flow, because they're the conversion mechanism.
+
+**The decision test:**
+
+> Do I have real output I can demonstrate right now?
+>
+> - No → build the feature. Upgrade the page after the loop runs.
+> - Yes → prove it on the page. Then build the delivery flow.
+
+Your acquisition channel determines how much landing page you need at launch. Warm channel (your log/social audience) → basic page is fine. Cold channel (organic search, paid, cold Reddit) → proof must be on the page before traffic arrives.
 
 ## UI Tooling
 
