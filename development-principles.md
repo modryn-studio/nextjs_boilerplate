@@ -17,7 +17,7 @@
 
 - **Start small. Don't think big.** - Ship one killer feature, not ten mediocre ones. Launch in days, not weeks.
 - **Your enemy is perfection, BUT the first prototype must function really well** - Ugly is acceptable. Broken is not. Polish the core action ruthlessly.
-- **Old World (Human Developer) = months to MVP. New World (AI-Assisted) = days to MVP** - Use time saved for user research and distribution, not more features.
+- **Old World (Human Developer) = months to MVP. New World (AI-Assisted) = days to MVP** - Use time saved for user research and distribution, not more features. Speed is table stakes now — everyone ships fast. The edge is what you do with the time you save.
 
 ## AI-First Development
 
