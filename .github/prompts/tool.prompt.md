@@ -26,7 +26,7 @@ Ask for the following if not already provided:
    - Set `logoUrl` to `/logos/<slug>.png`
    - If the icon cannot be fetched or the URL is unknown, omit `logoUrl` and note it in the PR body
 9. **Launched date** — (optional, only if status is `live` or `beta`) ISO date, e.g. `2026-03-01`
-10. **Log slug** — (optional) slug of the `/log` post documenting this build
+10. **Log slug** — (optional) slug of the `/log` post documenting this build. Written to the JSON as `"logSlug": "YYYY-MM-DD-[slug]"`.
 11. **Target subreddits** — (optional) 2–4 subreddits where the tool's target users hang out. Used by the `/social` prompt for launch-day distribution. Don't include r/SideProject (always included as founder channel). Example: `["r/webdev", "r/freelance"]`
 
 Then:
@@ -35,6 +35,7 @@ Then:
 - If it exists: update the file with the new values
 - If it does not exist: create it
 - Include `subreddits` as an array in the JSON if provided (e.g. `"subreddits": ["r/webdev", "r/freelance"]`)
+- Include `"logSlug": "YYYY-MM-DD-[slug]"` in the JSON if a log slug was provided
 - Use a branch named `tool/<slug>` and open a PR against `main` on `modryn-studio/modryn-studio-v2` with:
   - Title: `tool: add/update <tool name>`
   - Body: the JSON that was written, plus a one-line summary of what changed
