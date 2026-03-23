@@ -36,6 +36,15 @@ One-time setup. Run these in order when starting a new project.
 
 Get a URL as fast as possible. A live site — even a landing page — is worth more than a perfect local prototype. It unlocks tracking, distribution, and public accountability.
 
+**Build your public footprint first:**
+
+1. Run `/tool` — registers the tool on modrynstudio.com with `status: "building"`. Merge the PR right away.
+2. Run `/log` — first build log post. Document the idea, the origin, the plan. Merge the PR.
+3. **If there's a paid tier planned: add a founding member price now.** Email = curiosity. Pre-order = validation. Even $4.99 proves someone will exchange money, not just attention. Wire Stripe checkout before the core product exists and link it from the hero CTA. Worst case: zero buyers and you learned something before writing a line of core product code. (Paul Buchheit to YC founders: "Go sell the product ASAP before wasting time building it.")
+4. **Once you have 5+ pre-orders or serious signups: schedule calls.** Don't wait until launch. One 20-minute call with a real buyer reveals more than 100 passive signups. Ask: what's their current system, what have they tried, what made them act? The real product core surfaces here — not from what you planned to build.
+
+> `/tool` only needs `status: "building"` — you don't need a live product URL yet. Every day the listing exists is a day Google can index it. Every log post is content that compounds.
+
 **Deploy — two paths based on your deployment mode:**
 
 - **Standalone domain** (the product earns its own brand) →
@@ -46,18 +55,9 @@ Get a URL as fast as possible. A live site — even a landing page — is worth 
 
 - **Subdirectory on modrynstudio.com** (default for most tools) →
   1. Deploy to Vercel (note the `.vercel.app` URL)
-  2. Switch to **modryn-studio-v2** in VS Code
+  2. Switch back to **modryn-studio-v2** in VS Code
   3. Run `/deploy` — adds the rewrite wiring `modrynstudio.com/tools/[slug]/*` → your Vercel URL
   4. Set `mode: modryn-app` and `url:` in `context.md` → run `/update`
-
-**Build your public footprint immediately:**
-
-1. Run `/tool` — registers the tool on modrynstudio.com with `status: "building"`. Merge the PR right away.
-2. Run `/log` — first build log post. Document the idea, the origin, the plan. Merge the PR.
-3. **If there's a paid tier planned: add a founding member price now.** Email = curiosity. Pre-order = validation. Even $4.99 proves someone will exchange money, not just attention. Wire Stripe checkout before the core product exists and link it from the hero CTA. Worst case: zero buyers and you learned something before writing a line of core product code. (Paul Buchheit to YC founders: "Go sell the product ASAP before wasting time building it.")
-4. **Once you have 5+ pre-orders or serious signups: schedule calls.** Don't wait until launch. One 20-minute call with a real buyer reveals more than 100 passive signups. Ask: what's their current system, what have they tried, what made them act? The real product core surfaces here — not from what you planned to build.
-
-> Don't wait until launch for `/tool` and `/log`. Every day the URL exists is a day Google can index it. Every log post is content that compounds.
 
 ---
 
