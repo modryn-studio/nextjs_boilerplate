@@ -14,11 +14,14 @@ Every tool must have a reason to give you an email: notify me when X, save resul
 
 The shared Resend list is segmented per tool. One list, many segments, one broadcast when needed.
 
-### Tier 2: One-Time Payment ($5–$29)
+### Tier 2: Recurring Subscription (target state) / One-Time Payment (launch shortcut)
 
-Best fit for trend-chased micro-tools. No subscription overhead, no auth, no user accounts. Stays local-first.
+**The goal is recurring.** Stable monthly revenue — even $29–$99/mo from a small audience — is what creates a calm business. One-time payments require constant acquisition to maintain income. Recurring lets the product work while you sleep.
 
-- $9 sweet spot — enough to filter freeloaders, low enough for impulse buy
+**Use one-time as the launch shortcut, not the destination.** No subscription overhead, no auth, no user accounts — it's the fastest path to a first dollar. But when the product has proven retention (people coming back), convert to a recurring model.
+
+- One-time $9 sweet spot — enough to filter freeloaders, low enough for impulse buy. Use this to validate demand.
+- Subscription target: $19–$49/mo for tools with recurring use cases. Wire this once retention is confirmed.
 - Pattern: free tier works → user hits a limit → PayGate → localStorage receipt
 - Stripe handles the payment UI. Never build a custom checkout in a 48-hour window.
 
