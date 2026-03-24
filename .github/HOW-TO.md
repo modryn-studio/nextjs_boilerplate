@@ -54,10 +54,12 @@ Get a URL as fast as possible. A live site — even a landing page — is worth 
   4. Set `mode: standalone-domain` and `url:` in `context.md` → run `/update`
 
 - **Subdirectory on modrynstudio.com** (default for most tools) →
-  1. Deploy to Vercel (note the `.vercel.app` URL)
+  1. Deploy to Vercel (note the `.vercel.app` URL) — **this includes a landing page. You don't need a finished product. Any live page at the Vercel URL is enough.**
   2. Switch back to **modryn-studio-v2** in VS Code
   3. Run `/deploy` — adds the rewrite wiring `modrynstudio.com/tools/[slug]/*` → your Vercel URL
   4. Set `mode: modryn-app` and `url:` in `context.md` → run `/update`
+
+  > `status: "building"` + active rewrite is the standard state while the product is in development. The rewrite stays in `next.config.ts` throughout — when the real product ships, it replaces the landing page at the same Vercel URL and the rewrite keeps working with no changes needed in modryn-studio-v2.
 
 ---
 
@@ -265,7 +267,7 @@ Or run directly (requires [ImageMagick](https://imagemagick.org)):
 
 ```
 .github/
-├── copilot-instructions.md          ← Always-on context (derived — edit source docs, not this)
+├── copilot-instructions.md        ← Always-on context (derived — edit source docs, not this)
 ├── instructions/
 │   ├── nextjs.instructions.md           ← Auto-applied to .ts/.tsx files
 │   ├── seo.instructions.md              ← Auto-applied to .ts/.tsx files
@@ -273,19 +275,19 @@ Or run directly (requires [ImageMagick](https://imagemagick.org)):
 │   ├── file-writes.instructions.md     ← Applied to all files
 │   └── writing.instructions.md         ← Auto-applied to .mdx files
 ├── agents/
-│   ├── check.agent.md               ← @check agent (quality gate — reusable)
-│   └── prebuild.agent.md            ← @prebuild agent (pre-build discovery)
+│   ├── check.agent.md             ← @check agent (quality gate — reusable)
+│   └── prebuild.agent.md          ← @prebuild agent (pre-build discovery)
 ├── prompts/
-│   ├── setup.prompt.md              ← /setup (once)
-│   ├── update.prompt.md             ← /update (reusable)
-│   ├── validate.prompt.md           ← /validate (reusable)
-│   ├── assets.prompt.md             ← /assets (reusable)
-│   ├── tool.prompt.md               ← /tool (reusable)
-│   ├── deps.prompt.md               ← /deps (reusable)
-│   ├── log.prompt.md                ← /log (reusable)
-│   ├── seo.prompt.md                ← /seo (once)
-│   ├── launch.prompt.md             ← /launch (once)
-│   └── polish.prompt.md             ← /polish (reusable)
+│   ├── setup.prompt.md            ← /setup (once)
+│   ├── update.prompt.md           ← /update (reusable)
+│   ├── validate.prompt.md         ← /validate (reusable)
+│   ├── assets.prompt.md           ← /assets (reusable)
+│   ├── tool.prompt.md             ← /tool (reusable)
+│   ├── deps.prompt.md             ← /deps (reusable)
+│   ├── log.prompt.md              ← /log (reusable)
+│   ├── seo.prompt.md              ← /seo (once)
+│   ├── launch.prompt.md           ← /launch (once)
+│   └── polish.prompt.md           ← /polish (reusable)
 .vscode/
 ├── settings.json                  ← Agent mode, formatOnSave, Prettier default formatter
 ├── extensions.json                ← Recommends Prettier on first open
