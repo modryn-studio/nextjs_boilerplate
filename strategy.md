@@ -4,6 +4,31 @@ Validated March 2, 2026. This is the operating playbook for every tool shipped f
 
 ---
 
+## Discovery Methodology
+
+**The target:** a space that is growing fast, served poorly, and already has proven demand. All three. Not two.
+
+**The loop — how you find and confirm it:**
+
+```
+Input            → a signal worth tracking. A trend, a Reddit thread, a briefing
+                   item, a complaint pattern. Raw material.
+Observation      → what the signal actually means. Not what happened — why it matters.
+Contrarian Truth → the angle the market has gotten wrong. Name it precisely.
+                   If you can't, don't build.
+Proven Market    → someone is already paying for something in this space.
+                   Name two or three products. If you can't, it's a market
+                   creation bet — a different game entirely.
+```
+
+**The mapping:**
+
+- Growing fast → Input + Observation confirm momentum
+- Served poorly → Contrarian Truth (incumbents missed something)
+- Proven demand → Proven Market (people are already paying in this space)
+
+---
+
 ## Monetization — Ranked by Fit
 
 ### Tier 1: Email Capture (every tool, no exceptions)
@@ -102,7 +127,7 @@ Post-launch retrospective. The build story — what you spotted, what you built,
 
 ### Skip: Product Hunt
 
-Not worth the coordination overhead for trend-chased micro-tools. Your launch window is 48 hours; PH needs a week minimum.
+Not worth the coordination overhead for fast-turn tools. Your launch window is 48 hours; PH needs a week minimum.
 
 ---
 
@@ -124,7 +149,7 @@ Month 1+:          pSEO compounds, email list grows
 
 ## Domain Strategy
 
-All future trend-chased tools deploy under `modrynstudio.com` as subdirectory paths — not subdomains. Subdirectories inherit domain authority. Subdomains are treated as separate sites by Google.
+All future tools deploy under `modrynstudio.com` as subdirectory paths — not subdomains. Subdirectories inherit domain authority. Subdomains are treated as separate sites by Google.
 
 - ✅ `modrynstudio.com/tools/hiking-finder` — inherits authority
 - ❌ `hiking-finder.modrynstudio.com` — treated as a new domain, no authority inheritance
@@ -140,7 +165,7 @@ Setup per tool:
 3. modryn-studio-v2: add one rewrite entry in `next.config.ts` pointing that path to the deployment URL
 4. modryn-studio-v2: add the tool JSON to `/content/tools/[slug].json` for the landing page
 
-See GitHub issue #15 for the exact `next.config.ts` rewrite pattern and `basePath` setup.
+See `next.config.ts` in modryn-studio-v2 — three tools are already wired up as reference.
 
 **Other rules:**
 
