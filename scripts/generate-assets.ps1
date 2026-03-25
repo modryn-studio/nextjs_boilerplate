@@ -30,15 +30,15 @@
 #
 # -- Outputs -------------------------------------------------------------------
 #
-#   src/app/icon.png                  1024x1024 transparent (Next.js file convention)
-#   src/app/favicon.ico               Multi-res 48/32/16px transparent (Next.js file convention)
-#   src/app/apple-icon.png            180x180 on brand bg (iOS - no transparency support)
+#   app/icon.png                  1024x1024 transparent (Next.js file convention)
+#   app/favicon.ico               Multi-res 48/32/16px transparent (Next.js file convention)
+#   app/apple-icon.png            180x180 on brand bg (iOS - no transparency support)
 #   public/icon-light.png             Favicon for light mode
 #   public/icon-dark.png              Favicon for dark mode
 #   public/brand/banner.png           1280x320 README banner (if not already provided)
 #   public/brand/palette.png          1000x180 brand color swatch sheet
 #
-#   OG image is handled at build time by src/app/opengraph-image.tsx - not a static file.
+#   OG image is handled at build time by app/opengraph-image.tsx - not a static file.
 #
 # ------------------------------------------------------------------------------
 
@@ -75,7 +75,7 @@ if ($hasAlpha -eq "False") {
     exit 1
 }
 
-# -- Read site name + brand bg color from site.ts ------------------------------
+# -- Read site name + brand bg color from config/site.ts ----------------------
 $siteName = "Your Site"
 $bgColor  = "#111111"
 $siteTs   = "src\config\site.ts"
@@ -85,24 +85,19 @@ if (Test-Path $siteTs) {
         $m = [regex]::Match($nameLine.Line, "name:\s*'([^']+)'")
         if ($m.Success -and $m.Groups[1].Value -notmatch 'TODO') { $siteName = $m.Groups[1].Value }
     }
-    $bgLine = Select-String -Path $siteTs -Pattern "bg:\s*'(#[0-9a-fA-F]{3,8})'" | Select-Object -First 1
+    $bgLine = Select-String -Path $siteTs -Pattern "bg:\s*'([^']+)'" | Select-Object -First 1
     if ($bgLine) {
-        $m = [regex]::Match($bgLine.Line, "bg:\s*'(#[0-9a-fA-F]{3,8})'")
-        if ($m.Success) { $bgColor = $m.Groups[1].Value }
+        $m = [regex]::Match($bgLine.Line, "bg:\s*'([^']+)'")
+        if ($m.Success -and $m.Groups[1].Value -notmatch 'TODO') { $bgColor = $m.Groups[1].Value }
     }
 }
 
-# -- Compute banner text color from bg luminance --------------------------------
-# Relative luminance (sRGB): L = 0.2126R + 0.7152G + 0.0722B (linearized)
-# Use dark text on light backgrounds, light text on dark backgrounds.
-function Get-TextColor([string]$hex) {
-    $hex = $hex.TrimStart('#')
-    if ($hex.Length -eq 3) { $hex = "$($hex[0])$($hex[0])$($hex[1])$($hex[1])$($hex[2])$($hex[2])" }
-    $r = [Convert]::ToInt32($hex.Substring(0,2),16) / 255.0
-    $g = [Convert]::ToInt32($hex.Substring(2,2),16) / 255.0
-    $b = [Convert]::ToInt32($hex.Substring(4,2),16) / 255.0
-    $toLinear = { param($c) if ($c -le 0.04045) { $c/12.92 } else { [Math]::Pow(($c+0.055)/1.055, 2.4) } }
-    $L = 0.2126 * (& $toLinear $r) + 0.7152 * (& $toLinear $g) + 0.0722 * (& $toLinear $b)
+function Get-TextColor($hexColor) {
+    $r = [Convert]::ToInt32($hexColor.Substring(1,2), 16) / 255
+    $g = [Convert]::ToInt32($hexColor.Substring(3,2), 16) / 255
+    $b = [Convert]::ToInt32($hexColor.Substring(5,2), 16) / 255
+    $toLinear = { param($c) if ($c -le 0.04045) { $c / 12.92 } else { [Math]::Pow(($c + 0.055) / 1.055, 2.4) } }
+    $L = 0.2126 * (&$toLinear $r) + 0.7152 * (&$toLinear $g) + 0.0722 * (&$toLinear $b)
     if ($L -gt 0.179) { return "#1C1410" } else { return "#F5F5F5" }
 }
 $textColor = Get-TextColor $bgColor
@@ -114,36 +109,27 @@ Write-Host ""
 if (-not (Test-Path "src\app")) { New-Item -ItemType Directory -Path "src\app" | Out-Null }
 
 # -- Detect mark type ----------------------------------------------------------
-# Saturation near zero = grayscale (black/white/gray).
-# Grayscale marks are inverted when placed on a dark background so they remain
-# visible. Colored marks are used as-is.
 $maxSat      = [float](magick $logomark -colorspace HSL -channel Saturation -separate -format "%[fx:maxima]" info: 2>$null)
 $isGrayscale = $maxSat -lt 0.05
+
 $negateFrag  = if ($isGrayscale) { @('-channel', 'RGB', '-negate') } else { @() }
 
 # -- icon.png - browser tab favicon --------------------------------------------
-# Transparent. No background. No compositing.
-# Pad to square after trim so non-square marks don't stretch in browser tabs.
 magick $logomark -background none -trim +repage -resize 1024x1024 -gravity Center -background none -extent 1024x1024 "src\app\icon.png"
-Write-Host "  + src/app/icon.png"
+Write-Host "  + app/icon.png"
 
 # -- favicon.ico - legacy multi-resolution -------------------------------------
-# Transparent. Squarify before multi-res render to prevent browser stretching.
 magick $logomark -background none -trim +repage -resize 256x256 -gravity Center -background none -extent 256x256 -define icon:auto-resize=48,32,16 "src\app\favicon.ico"
-Write-Host "  + src/app/favicon.ico"
+Write-Host "  + app/favicon.ico"
 
 # -- apple-icon.png - iOS home screen ------------------------------------------
 # iOS does not support transparent icons - always composite onto brand bg.
-# Grayscale marks are inverted so they read as light on the dark bg.
 magick -size 180x180 xc:"$bgColor" `
     '(' $logomark -background none -trim +repage $negateFrag -resize 140x140 ')' `
     -gravity Center -composite "src\app\apple-icon.png"
-Write-Host "  + src/app/apple-icon.png"
+Write-Host "  + app/apple-icon.png"
 
 # -- Favicon pair - light / dark mode ------------------------------------------
-# DUAL:   logomark-dark.png supplied - use it directly for dark mode.
-# AUTO:   grayscale mark - invert for dark mode (dark mark becomes light mark).
-# SINGLE: colored mark - same image for both modes.
 if (Test-Path $logomarkDark) {
     Write-Host "  favicon mode: DUAL" -ForegroundColor DarkGray
     Copy-Item $logomark     "public\icon-light.png"
@@ -161,8 +147,6 @@ Write-Host "  + public/icon-light.png"
 Write-Host "  + public/icon-dark.png"
 
 # -- banner.png - README header ------------------------------------------------
-# Auto-generated only if not already provided by the user.
-# Text color is computed from bg luminance - dark text on light bg, light on dark.
 if (Test-Path $banner) {
     Write-Host "  ~ public/brand/banner.png (skipped - file already exists)"
 } else {
@@ -181,6 +165,6 @@ if (Test-Path $banner) {
 Write-Host ""
 Write-Host "  Done." -ForegroundColor Green
 if ($siteName -eq "Your Site") {
-    Write-Host "  Tip: fill in src/config/site.ts then re-run to stamp your site name on the banner." -ForegroundColor DarkGray
+    Write-Host "  Tip: fill in config/site.ts then re-run to stamp your site name on the banner." -ForegroundColor DarkGray
 }
 Write-Host ""
