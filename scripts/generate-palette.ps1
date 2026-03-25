@@ -1,7 +1,7 @@
 # scripts/generate-palette.ps1
 # ------------------------------------------------------------------------------
-# Generates public/brand/palette.png — a 1000x180 color swatch sheet — by
-# reading the 5 color tokens from src/app/globals.css @theme.
+# Generates public/brand/palette.png Ã¢â‚¬â€ a 1000x180 color swatch sheet Ã¢â‚¬â€ by
+# reading the 5 color tokens from app/globals.css @theme inline block.
 #
 # Run any time after filling in colors in globals.css. No logomark required.
 # Also called automatically by generate-assets.ps1.
@@ -36,7 +36,6 @@ $cssPath = "src\app\globals.css"
 if (-not (Test-Path $cssPath)) {
     Write-Host ""
     Write-Host "  ERROR: $cssPath not found." -ForegroundColor Red
-    Write-Host "  Run /init first to generate globals.css with brand color tokens." -ForegroundColor Yellow
     Write-Host ""
     exit 1
 }
@@ -63,14 +62,14 @@ if ($palette.Count -lt 5) {
     Write-Host ""
     Write-Host "  ERROR: $($palette.Count)/5 color tokens found in $cssPath." -ForegroundColor Red
     Write-Host "  Missing: $($missing -join ', ')" -ForegroundColor Yellow
-    Write-Host "  Add the missing tokens to the @theme block in globals.css and re-run." -ForegroundColor Yellow
+    Write-Host "  Note: This project uses oklch values in :root and hex aliases in @theme." -ForegroundColor Yellow
+    Write-Host "  Add hex values for the missing tokens in the @theme block in globals.css." -ForegroundColor Yellow
     Write-Host ""
     exit 1
 }
 
 if (-not (Test-Path "public\brand")) { New-Item -ItemType Directory -Path "public\brand" | Out-Null }
 
-Write-Host ""
 Write-Host "  Generating palette..." -ForegroundColor Cyan
 
 $tmpFiles = @()
@@ -79,7 +78,7 @@ foreach ($label in $palette.Keys) {
     $hex = $palette[$label]
     $out = "tmp_sw_$idx.png"
     $tmpFiles += $out
-    # Each swatch: 200x180 — top 120px solid color, bottom 60px cream label strip
+    # Each swatch: 200x180 Ã¢â‚¬â€ top 120px solid color, bottom 60px cream label strip
     magick `
         '(' -size 200x120 xc:"$hex" ')' `
         '(' -size 200x60 xc:'#FFFAF5' `
@@ -94,5 +93,4 @@ foreach ($label in $palette.Keys) {
 magick $tmpFiles +append "public\brand\palette.png"
 $tmpFiles | Remove-Item -ErrorAction SilentlyContinue
 
-Write-Host "  + public/brand/palette.png" -ForegroundColor Green
-Write-Host ""
+Write-Host "  + public/brand/palette.png"
