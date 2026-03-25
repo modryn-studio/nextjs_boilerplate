@@ -32,7 +32,7 @@ if (-not (Get-Command magick -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-$cssPath = "src\app\globals.css"
+$cssPath = "app\globals.css"
 if (-not (Test-Path $cssPath)) {
     Write-Host ""
     Write-Host "  ERROR: $cssPath not found." -ForegroundColor Red
