@@ -26,7 +26,7 @@ Update the following sections based on what changed. Do not touch sections that 
 - **`## Who I Am`** — product description, user types from `brand.md` and `context.md`
 - **`## Stack`** — derive from `package.json` (installed) + `context.md` Stack Additions (not yet installed). Never list a package as installed if it's not in `package.json`.
 - **`## Project Structure`** — any new dirs added to `context.md` Project Structure Additions
-- **`## Route Map`** — every route listed in `context.md` Route Map, one-line description each.
+- **`## Route Map`** — every route listed in `context.md` Route Map, one-line description each. Always include `/privacy` and `/terms` pages.
 - **`## Brand & Voice`** — voice rules, visual rules, emotional arc, copy rules, user-type-specific rules from `brand.md`
 
 ---
