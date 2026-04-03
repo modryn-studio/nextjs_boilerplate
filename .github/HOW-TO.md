@@ -14,9 +14,14 @@ One-time setup. Run these in order when starting a new project.
    git clone https://github.com/modryn-studio/nextjs_boilerplate [YOUR_PROJECT_NAME]
    cd [YOUR_PROJECT_NAME]
    ```
-3. Re-point the remote to the new project repo:
+3. Reset the git history and point to the new repo (this gives you a clean 1-commit start — cloning brings all boilerplate history along otherwise):
    ```powershell
-   git remote set-url origin https://github.com/modryn-studio/YOUR-REPO
+   Remove-Item -Recurse -Force .git
+   git init -b main
+   git add -A
+   git commit -m "init"
+   git remote add origin https://github.com/modryn-studio/YOUR-REPO
+   git push -u origin main
    ```
 4. Run `npm install`
 5. **Discovery** — two paths:
