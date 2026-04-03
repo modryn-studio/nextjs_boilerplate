@@ -24,8 +24,8 @@ One-time setup. Run these in order when starting a new project.
    - **Docs already written** → Drop your pre-filled `context.md` and `brand.md` into the project root, replacing the stubs.
 6. Run `/validate` — web-searches competitors, user pain, SEO opportunity, and brand positioning. Go back and forth. Update `context.md` and `brand.md` based on findings.
 7. Type `/setup` — reads source docs, fills in `copilot-instructions.md` + `src/config/site.ts`. Start the dev server (`Ctrl+Shift+B`) and check the basic landing page in your browser.
-8. Create or drop your logomark at `public/brand/logomark.png`. Verify the favicon shows up in the browser tab.
-9. Run `/assets` — generates all favicons, icons, and banner. Push to `main`.
+8. Create or drop your logomark at `public/brand/logomark.png`. The file must be 1024×1024 — use ImageMagick to pad if needed: `magick logomark.png -gravity center -background none -extent 1024x1024 logomark.png`
+9. Run `/assets` — generates all favicons, icons, and banner. Push to `main`. Then verify the favicon shows up in the browser tab.
 10. Run `/deps` — validates all dependencies against live docs, surfaces breaking API changes.
 
 > After setup, **never edit `copilot-instructions.md` or `site.ts` directly**. Edit the source docs → run `/update`.
