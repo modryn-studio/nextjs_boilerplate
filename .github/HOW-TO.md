@@ -185,20 +185,20 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 
 ### Reusable vs. One-Time Commands
 
-| Command     | Frequency | What it does                                                                                                                                                          |
-| ----------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/setup`    | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs                                                                                                          |
-| `/update`   | Reusable  | Cascades source doc edits into derived files                                                                                                                          |
+| Command     | Frequency | What it does |
+| ----------- | --------- | ------------ |
+| `/setup`    | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs |
+| `/update`   | Reusable  | Cascades source doc edits into derived files |
 | `/validate` | Reusable  | Reads `context.md`, `brand.md`, `strategy.md` + web-searches to validate. **Agent mode only.** Phase 1: run open-ended. Phase 4+: add focus question in same message. |
-| `/assets`   | Reusable  | Generates favicons, icons, banner from logomark                                                                                                                       |
-| `/tool`     | Reusable  | Registers/updates tool on modrynstudio.com (`building` → `live`)                                                                                                      |
-| `/log`      | Reusable  | Drafts a build log post — run at every milestone                                                                                                                      |
-| `/deps`     | Reusable  | Validates dependencies against live docs                                                                                                                              |
-| `/seo`      | Once      | SEO audit + Search Console + Bing setup                                                                                                                               |
-| `/launch`   | Once      | Distribution checklist: sharing hooks, OG, social prep                                                                                                                |
-| `/polish`   | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets                                                                              |
-| `@check`    | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                          |
-| `@prebuild` | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md`                                                                                               |
+| `/assets`   | Reusable  | Generates favicons, icons, banner from logomark |
+| `/tool`     | Reusable  | Registers/updates tool on modrynstudio.com (`building` → `live`) |
+| `/log`      | Reusable  | Drafts a build log post — run at every milestone |
+| `/deps`     | Reusable  | Validates dependencies against live docs |
+| `/seo`      | Once      | SEO audit + Search Console + Bing setup |
+| `/launch`   | Once      | Distribution checklist: sharing hooks, OG, social prep |
+| `/polish`   | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets |
+| `@check`    | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes |
+| `@prebuild` | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md` |
 
 > **modryn-studio-v2 only:** `/deploy` and `/social` exist only in that repo. Switch workspaces to run them.
 
@@ -243,15 +243,15 @@ The script auto-detects whether your mark is colored or grayscale and generates 
 
 **What gets generated:**
 
-| File                      | Purpose                                                                            |
-| ------------------------- | ---------------------------------------------------------------------------------- |
+| File                      | Purpose |
+| ------------------------- | ------- |
 | `public/favicon.svg`      | Primary favicon — embeds both PNGs, switches via `prefers-color-scheme` in the SVG |
-| `public/icon-light.png`   | PNG fallback for browsers without SVG favicon support                              |
-| `public/icon-dark.png`    | PNG fallback (dark variant)                                                        |
-| `src/app/favicon.ico`     | Safari browser tab + legacy fallback — Next.js file convention                     |
-| `src/app/icon.png`        | 1024×1024 — required for auto-generated webmanifest                                |
-| `src/app/apple-icon.png`  | iOS "Add to Home Screen" — Next.js file convention                                 |
-| `public/brand/banner.png` | README header (auto-generated if absent)                                           |
+| `public/icon-light.png`   | PNG fallback for browsers without SVG favicon support |
+| `public/icon-dark.png`    | PNG fallback (dark variant) |
+| `src/app/favicon.ico`     | Safari browser tab + legacy fallback — Next.js file convention |
+| `src/app/icon.png`        | 1024×1024 — required for auto-generated webmanifest |
+| `src/app/apple-icon.png`  | iOS "Add to Home Screen" — Next.js file convention |
+| `public/brand/banner.png` | README header (auto-generated if absent) |
 
 OG image is generated at build time by `src/app/opengraph-image.tsx` — not a static file.
 
@@ -264,6 +264,53 @@ Or run directly (requires [ImageMagick](https://imagemagick.org)):
 ### Hooks
 
 **Format on Save** — files are auto-formatted with Prettier on save. Requires the [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) (VS Code will prompt). Rules in `.prettierrc`.
+
+### Email Setup
+
+Every project ships with a working email system out of the box. Two services, two jobs:
+
+| Service | Job |
+| ------- | --- |
+| **Gmail SMTP (nodemailer)** | Founder notifications — you get an email when someone signs up, submits feedback, or files a bug |
+| **Resend** | Audience management — signups are added to your shared Resend contact list, tagged by project |
+
+**What's included without any extra code:**
+
+- `src/app/api/feedback/route.ts` — handles `newsletter`, `feedback`, and `bug` submissions. One route, all three.
+- `src/components/email-signup.tsx` — ready-to-drop signup form. Calls the feedback route with `type: "newsletter"`.
+
+**Env vars to set** (copy from `.env.local.example`):
+
+```bash
+GMAIL_USER=you@gmail.com
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx   # Gmail app password — NOT your account password
+FEEDBACK_TO=you@gmail.com               # Where founder notifications land (defaults to GMAIL_USER)
+RESEND_API_KEY=re_xxxx                  # Adds signups to your Resend audience
+RESEND_SEGMENT_ID=                      # Optional — tags signups to a named segment in Resend
+```
+
+> **Gmail app password:** Go to myaccount.google.com → Security → 2-Step Verification → App passwords. Generate one for "Mail". Use that 16-character code, not your Gmail password.
+
+**How the Resend audience works:**
+
+All projects share one Resend account and one audience. Every signup is automatically tagged with `source: site.name` (e.g. `source: "My Project"`). Filter by `source` in the Resend dashboard to see signups per-project — no separate audiences or segments needed.
+
+`RESEND_SEGMENT_ID` is optional. If you want signups from this project to appear in a named Resend segment (e.g. "My Project Waitlist"), create the segment at resend.com → Audience → Segments, copy its ID, and set this var. The code handles it automatically.
+
+**The upgrade path — transactional email:**
+
+The basic kit only handles founder notifications and contact list management. When a project needs to send emails _to users_ (order confirmations, delivery notifications, etc.), add:
+
+1. `src/emails/your-template.tsx` — React Email template (`@react-email/components`)
+2. A route that calls `resend.emails.send()` with that template
+3. Fill in these two vars (already in `.env.local.example` as stubs):
+   ```bash
+   RESEND_FROM_EMAIL=Your Project <hello@modrynstudio.com>  # modrynstudio.com is already verified in Resend
+   NEXT_PUBLIC_SITE_URL=https://yourdomain.com              # Used to build links inside emails
+   ```
+4. Install `@react-email/components` and `react-email`
+
+> **Don't add a "you're signed up" confirmation email to the basic signup kit.** The inline success state already confirms it. A cold transactional email from a brand someone just discovered goes straight to spam and adds complexity for zero conversion benefit. Add it only when you have a specific reason — e.g. delivering a product, sending a magic link, or running a drip sequence.
 
 ### MCP Servers
 
