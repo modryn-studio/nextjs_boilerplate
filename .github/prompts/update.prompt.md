@@ -13,6 +13,7 @@ Run this any time you edit `context.md` or `brand.md`. Do not run `/setup` again
 ## Step 1: Read the source files
 
 Read all three source files:
+
 1. `context.md` — product name, URL, target user, stack, routes, monetization, analytics events
 2. `brand.md` — voice rules, visual rules, user types, emotional arc, copy examples
 3. `development-principles.md` — product philosophy (rarely changes, but check it)
@@ -75,23 +76,61 @@ If both are already accurate, leave the file alone.
 Create the `docs/` directory if it doesn't exist. Generate or update `docs/guide.md` based on the **actual current state of the codebase** — not the source docs.
 
 **Read these files:**
+
 - `src/app/page.tsx` — what sections are on the page
 - `src/components/` — any interactive components (forms, widgets)
 
 **Write the guide with these rules:**
-- Extremely short. Plain language. No jargon. No component names. No API details.
-- One sentence of context, then numbered steps for any user action that exists.
+
+- Written for a non-technical user who has never seen the app. Plain language. No component names, no API details, no code.
+- One sentence of context per section, then numbered steps for any action that isn't obvious.
 - If a feature isn't live yet, say so in one line. Don't explain why.
 - End with a status table: what works ✅, what's built but not wired ⏳, what's missing ❌.
-- The entire guide should fit on one screen. If it's longer than ~40 lines, it's too long.
+- Scannable over readable — short sections, no dense paragraphs, no walls of text. A user should be able to find what they need in 10 seconds.
 
 If `docs/guide.md` already exists, update it to reflect current state. Remove anything that's no longer true.
 
 ---
 
-## Step 7: Report
+## Step 7: Update `docs/architecture.md`
+
+Update `docs/architecture.md` to reflect the current state of the AI plumbing. Read the actual source before writing — do not guess.
+
+**Read these files:**
+
+- `src/app/api/chat/route.ts` — DM route: model, tools, message window, memory fetch
+- `src/app/api/threads/[threadId]/respond/route.ts` — thread respond: model, tools, transcript structure, idempotency
+- `src/lib/tokens.ts` — `assembleContext()` budget and priority order
+- `src/lib/context.ts` — memory fetch and org extraction helpers
+- Latest migration file in `migrations/` — for any schema changes
+
+**Update only sections that have actually changed:**
+
+- Models (if the model strings changed)
+- System prompt priority order (if layers were added/removed/reordered)
+- DM vs Thread message structure (if window size, transcript format, or history logic changed)
+- Web search (if the gate condition, maxUses, or tool name changed)
+- Memory (if triggers, row limits, or table names changed)
+- Thread orchestration (if the client-side loop logic changed)
+- Member IDs (if members were added or removed — query the DB or check migrations)
+- DB schema table list (if new tables were added)
+
+If a genuinely new capability exists in the source files that has no corresponding section in `architecture.md` (e.g. a new route type, a new utility tool, a new memory tier, a new tool integration), add a new minimal section for it. Keep new sections to the same density as existing ones.
+
+**Rules:**
+
+- `architecture.md` covers AI plumbing only: models, system prompts, memory, thread orchestration, DB schema. Stack, conventions, and routes are documented in `copilot-instructions.md` — do not duplicate them here.
+- Keep it lean — one or two sentences per section max, tables where they help
+- Do not add commentary or reasoning — just facts about how it's built
+- Do not remove sections that are still accurate
+- Never document something that isn't in the code
+
+---
+
+## Step 8: Report
 
 After cascading, report:
+
 - Which files were changed and which sections were updated
 - Which files were already in sync (no changes needed)
 - Anything in `context.md` or `brand.md` that is incomplete, contradictory, or missing that could cause issues later (flag but do not invent)
