@@ -87,13 +87,22 @@ NEXT_PUBLIC_SITE_URL=https://yourproject.app
 
 All three are stubbed in `.env.local.example`. Copy them to `.env.local` and fill in real values before testing auth locally.
 
-### 3. `trusted_origins` in the Neon DB
-After creating the Neon Auth project, run this SQL (via Neon MCP or the Neon console):
+**Important:** `NEXT_PUBLIC_SITE_URL` must be added to Vercel environment variables *before* the deployment runs. If you add it after a deploy, trigger a fresh redeploy — the value is baked in at build time.
 
-```sql
-UPDATE neon_auth.project_config
-SET trusted_origins = '["https://yourproject.app", "https://www.yourproject.app"]'::jsonb
-WHERE project = 'your-project-name';
-```
+### 3. `trusted_origins` — use the Neon console UI
 
-`allow_localhost` defaults to `true` — no change needed for local dev.
+**Always use the Neon console UI to add trusted origins** — not direct SQL.
+
+Neon Auth's managed service may not immediately pick up writes to `neon_auth.project_config` via SQL. The console UI is the reliable path:
+
+> Neon console → your project → **Auth** tab → **Trusted origins** → add `https://yourproject.app` and `https://www.yourproject.app`
+
+Add both `www.` and non-`www.` variants. `allow_localhost` is on by default — no change needed for local dev.
+
+## Neon Auth user store vs. your DB tables
+
+Neon Auth manages its own user store separately from your application tables (`properties`, `yard_properties`, etc.).
+
+- Deleting rows from your DB tables does **not** remove the user from Neon Auth.
+- If you need to re-test a fresh signup with the same email, delete the user from: Neon console → Auth → Users.
+- Stale auth users won't cause `INVALID_ORIGIN` — that's an origin header issue. They can cause "user already exists" errors if the same email tries to sign up again.
