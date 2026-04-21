@@ -66,14 +66,34 @@ export const { GET, POST, PUT, DELETE, PATCH } = auth.handler();
 
 ## Three things required for auth to work in production
 
-1. **`withCanonicalOrigin` wrapper** in `app/api/auth/[...path]/route.ts` (above)
+### 1. `withCanonicalOrigin` wrapper
+Use the route handler above. Do not simplify it back to a re-export.
 
-2. **`NEXT_PUBLIC_SITE_URL`** set in Vercel environment variables to the canonical production URL. No trailing slash. Example: `https://yourproject.app`. Without this, `withCanonicalOrigin` is a no-op.
+### 2. Environment variables
+Add these to `.env.local` and to Vercel environment variables:
 
-3. **`trusted_origins` in the Neon DB** — after creating the Neon Auth project, run:
-   ```sql
-   UPDATE neon_auth.project_config
-   SET trusted_origins = '["https://yourproject.app", "https://www.yourproject.app"]'::jsonb
-   WHERE project = 'your-project-name';
-   ```
-   `allow_localhost` defaults to `true` — no change needed for local dev.
+```bash
+# From the Neon console → your project → Auth tab
+NEON_AUTH_BASE_URL=https://<endpoint-id>.neonauth.<region>.aws.neon.tech/<db>/auth
+
+# Any random 32+ char string — generate one:
+# node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+NEON_AUTH_COOKIE_SECRET=your_32_plus_char_secret_here
+
+# Your canonical production URL — no trailing slash
+# withCanonicalOrigin() reads this to rewrite the Origin header
+NEXT_PUBLIC_SITE_URL=https://yourproject.app
+```
+
+All three are stubbed in `.env.local.example`. Copy them to `.env.local` and fill in real values before testing auth locally.
+
+### 3. `trusted_origins` in the Neon DB
+After creating the Neon Auth project, run this SQL (via Neon MCP or the Neon console):
+
+```sql
+UPDATE neon_auth.project_config
+SET trusted_origins = '["https://yourproject.app", "https://www.yourproject.app"]'::jsonb
+WHERE project = 'your-project-name';
+```
+
+`allow_localhost` defaults to `true` — no change needed for local dev.
