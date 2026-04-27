@@ -94,9 +94,17 @@ Wire the complete loop end-to-end before polishing any single piece. One real or
 
 Open `context.md` → find `## Minimum Money Loop` → keep it visible. Every build session, ask: _does this work advance the loop, or is it polish?_
 
-**Default rule: do not touch the landing page until the loop has run once with a real order.**
+**Default rule: the landing page and the video go live on the same day. This is not optional.**
 
-The `/setup` page is enough to capture warm traffic (log readers, social followers). Don't polish it. Build the feature and use real product output as the landing page upgrade after the loop runs — that's proof, not decoration.
+The landing page is not polish — it is the demand test. The Modryn Loop validates with a pre-order page before the product is finished, not after. A live page with a $9 CTA and a same-day video is the instrument. The money loop closes after demand is proven, not before.
+
+Sequence for every product:
+
+1. Build the core deliverable surface (the recipient page, the output page — whatever the buyer sends to someone else)
+2. Record the video per Ogilvy's script
+3. Build the landing page with locked copy and $9 CTA
+4. Go live — video posted and landing page live same day
+5. Wire the money loop after 50 pre-orders confirm demand
 
 **Exception — put output on the page first if you already have it:** If you have real examples of the finished result before the feature is built (audio samples, screenshots, a completed demo), add them to the landing page _before_ building the ordering flow. That's not polish — it's the conversion mechanism, and it can't wait. The rule is: don't build UI you don't need yet. Real output you already have is never wasted.
 
@@ -185,20 +193,20 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 
 ### Reusable vs. One-Time Commands
 
-| Command     | Frequency | What it does |
-| ----------- | --------- | ------------ |
-| `/setup`    | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs |
-| `/update`   | Reusable  | Cascades source doc edits into derived files |
+| Command     | Frequency | What it does                                                                                                                                                          |
+| ----------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/setup`    | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs                                                                                                          |
+| `/update`   | Reusable  | Cascades source doc edits into derived files                                                                                                                          |
 | `/validate` | Reusable  | Reads `context.md`, `brand.md`, `strategy.md` + web-searches to validate. **Agent mode only.** Phase 1: run open-ended. Phase 4+: add focus question in same message. |
-| `/assets`   | Reusable  | Generates favicons, icons, banner from logomark |
-| `/tool`     | Reusable  | Registers/updates tool on modrynstudio.com (`building` → `live`) |
-| `/log`      | Reusable  | Drafts a build log post — run at every milestone |
-| `/deps`     | Reusable  | Validates dependencies against live docs |
-| `/seo`      | Once      | SEO audit + Search Console + Bing setup |
-| `/launch`   | Once      | Distribution checklist: sharing hooks, OG, social prep |
-| `/polish`   | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets |
-| `@check`    | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes |
-| `@prebuild` | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md` |
+| `/assets`   | Reusable  | Generates favicons, icons, banner from logomark                                                                                                                       |
+| `/tool`     | Reusable  | Registers/updates tool on modrynstudio.com (`building` → `live`)                                                                                                      |
+| `/log`      | Reusable  | Drafts a build log post — run at every milestone                                                                                                                      |
+| `/deps`     | Reusable  | Validates dependencies against live docs                                                                                                                              |
+| `/seo`      | Once      | SEO audit + Search Console + Bing setup                                                                                                                               |
+| `/launch`   | Once      | Distribution checklist: sharing hooks, OG, social prep                                                                                                                |
+| `/polish`   | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets                                                                              |
+| `@check`    | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                          |
+| `@prebuild` | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md`                                                                                               |
 
 > **modryn-studio-v2 only:** `/deploy` and `/social` exist only in that repo. Switch workspaces to run them.
 
@@ -243,15 +251,15 @@ The script auto-detects whether your mark is colored or grayscale and generates 
 
 **What gets generated:**
 
-| File                      | Purpose |
-| ------------------------- | ------- |
+| File                      | Purpose                                                                            |
+| ------------------------- | ---------------------------------------------------------------------------------- |
 | `public/favicon.svg`      | Primary favicon — embeds both PNGs, switches via `prefers-color-scheme` in the SVG |
-| `public/icon-light.png`   | PNG fallback for browsers without SVG favicon support |
-| `public/icon-dark.png`    | PNG fallback (dark variant) |
-| `src/app/favicon.ico`     | Safari browser tab + legacy fallback — Next.js file convention |
-| `src/app/icon.png`        | 1024×1024 — required for auto-generated webmanifest |
-| `src/app/apple-icon.png`  | iOS "Add to Home Screen" — Next.js file convention |
-| `public/brand/banner.png` | README header (auto-generated if absent) |
+| `public/icon-light.png`   | PNG fallback for browsers without SVG favicon support                              |
+| `public/icon-dark.png`    | PNG fallback (dark variant)                                                        |
+| `src/app/favicon.ico`     | Safari browser tab + legacy fallback — Next.js file convention                     |
+| `src/app/icon.png`        | 1024×1024 — required for auto-generated webmanifest                                |
+| `src/app/apple-icon.png`  | iOS "Add to Home Screen" — Next.js file convention                                 |
+| `public/brand/banner.png` | README header (auto-generated if absent)                                           |
 
 OG image is generated at build time by `src/app/opengraph-image.tsx` — not a static file.
 
@@ -269,10 +277,10 @@ Or run directly (requires [ImageMagick](https://imagemagick.org)):
 
 Every project ships with a working email system out of the box. Two services, two jobs:
 
-| Service | Job |
-| ------- | --- |
+| Service                     | Job                                                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
 | **Gmail SMTP (nodemailer)** | Founder notifications — you get an email when someone signs up, submits feedback, or files a bug |
-| **Resend** | Audience management — signups are added to your shared Resend contact list, tagged by project |
+| **Resend**                  | Audience management — signups are added to your shared Resend contact list, tagged by project    |
 
 **What's included without any extra code:**
 
