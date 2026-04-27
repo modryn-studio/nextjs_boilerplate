@@ -1,5 +1,5 @@
 // Single source of truth for all site-wide metadata.
-// /init fills this in from context.md + brand.md.
+// /setup fills this in from context.md + brand.md.
 // Every other file imports from here — never hardcode site metadata elsewhere.
 export const site = {
   name: 'TODO: site name',
@@ -18,7 +18,7 @@ export const site = {
   founder: 'Luke Hanner',
   email: 'hello@DOMAIN.com', // TODO: contact email — set up forwarding in Vercel Dashboard → Domains → Email
   // Waitlist section copy — shown in the EmailSignup component on the landing page.
-  // /init fills these in from context.md + brand.md. Never leave as TODO in production.
+  // /setup fills these in from context.md + brand.md. Never leave as TODO in production.
   waitlist: {
     headline: 'TODO: waitlist headline (4–7 words)',
     subheadline: 'TODO: 1–2 sentences. Why they should sign up. Reference the product promise.',
