@@ -96,3 +96,19 @@ The landing page will be built manually from locked copy. Check `docs/landing-pa
   - `headline: 'Early access'`
   - `subheadline: 'Sign up to be first in line.'`
   - `success: "You're on the list."`
+
+---
+
+## Stripe Skills (Pre-installed)
+
+Stripe AI skills are already in `.agents/skills/` — no install step needed. They load automatically when working on any Stripe integration and cover:
+
+- `stripe-best-practices` — API selection, Connect, billing, security, treasury
+- `stripe-projects` — Stripe Projects CLI for provisioning
+- `upgrade-stripe` — API version upgrade checklist (latest: `2026-04-22.dahlia`)
+
+To update to the latest version at any time:
+
+```
+npx skills add -y https://docs.stripe.com
+```
