@@ -28,12 +28,12 @@ export const site = {
   accent: '#F97415', // TODO: brand accent hex
   bg: '#050505', // TODO: brand background hex
   // Social profiles — used in footer links and Twitter card metadata.
-  // twitter/twitterHandle/devto/shipordie are universal — pre-filled.
-  // github is per-project — update to this repo's URL.
+  // twitter/twitterHandle: null until a brand account exists. Never default to a personal handle.
+  // github is not a user-facing field for consumer products — do not add it here.
+  // devto/shipordie are Luke's builder identity — keep if relevant to this project.
   social: {
-    twitter: 'https://x.com/lukehanner',
-    twitterHandle: '@lukehanner',
-    github: 'https://github.com/TODO', // TODO: this repo's URL
+    twitter: null as string | null, // TODO: set to brand X URL once account exists (e.g. 'https://x.com/yourbrand')
+    twitterHandle: null as string | null, // TODO: set to brand handle once account exists (e.g. '@yourbrand')
     devto: 'https://dev.to/lukehanner',
     shipordie: 'https://shipordie.club/lukehanner',
   },
