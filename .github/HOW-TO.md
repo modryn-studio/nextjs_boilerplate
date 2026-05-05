@@ -205,6 +205,7 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 | `/seo`      | Once      | SEO audit + Search Console + Bing setup                                                                                                                               |
 | `/launch`   | Once      | Distribution checklist: sharing hooks, OG, social prep                                                                                                                |
 | `/polish`   | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets                                                                              |
+| `/notify`   | Reusable  | Scans all API routes, adds founder notifications to any event that doesn't have one yet                                                                               |
 | `@check`    | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                          |
 | `@prebuild` | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md`                                                                                               |
 
@@ -277,15 +278,16 @@ Or run directly (requires [ImageMagick](https://imagemagick.org)):
 
 Every project ships with a working email system out of the box. Two services, two jobs:
 
-| Service                     | Job                                                                                              |
-| --------------------------- | ------------------------------------------------------------------------------------------------ |
-| **Gmail SMTP (nodemailer)** | Founder notifications — you get an email when someone signs up, submits feedback, or files a bug |
-| **Resend**                  | Audience management — signups are added to your shared Resend contact list, tagged by project    |
+| Service                     | Job                                                                                           |
+| --------------------------- | --------------------------------------------------------------------------------------------- |
+| **Gmail SMTP (nodemailer)** | Founder notifications — you get an email when something happens in the product                |
+| **Resend**                  | Audience management — signups are added to your shared Resend contact list, tagged by project |
 
 **What's included without any extra code:**
 
 - `src/app/api/feedback/route.ts` — handles `newsletter`, `feedback`, and `bug` submissions. One route, all three.
 - `src/components/email-signup.tsx` — ready-to-drop signup form. Calls the feedback route with `type: "newsletter"`.
+- `src/lib/notify.ts` — shared helper for sending founder notifications from any API route.
 
 **Env vars to set** (copy from `.env.local.example`):
 
@@ -305,9 +307,53 @@ All projects share one Resend account and one audience. Every signup is automati
 
 `RESEND_SEGMENT_ID` is optional. If you want signups from this project to appear in a named Resend segment (e.g. "My Project Waitlist"), create the segment at resend.com → Audience → Segments, copy its ID, and set this var. The code handles it automatically.
 
-**The upgrade path — transactional email:**
+**Adding notifications to API routes (notify.ts pattern):**
 
-The basic kit only handles founder notifications and contact list management. When a project needs to send emails _to users_ (order confirmations, delivery notifications, etc.), add:
+`src/lib/notify.ts` is the shared notification helper. Call it from any route to send a founder notification when something significant happens.
+
+```typescript
+import { after } from 'next/server';
+import { sendNotification, notifyHtml } from '@/lib/notify';
+import { site } from '@/config/site';
+
+// Fire-and-forget after response is sent — use after() when the notification
+// must not delay the response (payments, form submissions, user-facing actions)
+after(() =>
+  sendNotification(
+    `🎁 [${site.name}] Something happened`,
+    notifyHtml('🎁 Something happened', [
+      ['Key', 'value'],
+      ['Key', 'value'],
+    ])
+  )
+);
+
+// Or void for non-critical paths where after() isn't available
+void sendNotification(subject, html);
+```
+
+`sendNotification` never throws — it silently no-ops if `GMAIL_USER`/`GMAIL_APP_PASSWORD` are not set. Safe to call anywhere.
+
+**When to notify (good events):**
+
+- New order / checkout started
+- Payment captured
+- Core product delivered (song generated, report ready, etc.)
+- Generation failed after payment (needs manual action)
+- Recipient opened the thing
+- Reaction / engagement captured
+
+**When not to notify:**
+
+- Polling routes (`GET` returning `status: 'pending'`)
+- Validation errors — use `log.warn()` instead
+- Events that will fire hundreds of times per hour (use a threshold or rate-limit)
+
+**Run `/notify` after adding new routes** to automatically wire notifications into any route that doesn't have them yet.
+
+**The upgrade path — transactional email (Resend → users):**
+
+The basic kit sends emails _to you_ (founder notifications). When a project needs to send emails _to users_ (order confirmations, delivery, etc.), add:
 
 1. `src/emails/your-template.tsx` — React Email template (`@react-email/components`)
 2. A route that calls `resend.emails.send()` with that template
@@ -318,7 +364,20 @@ The basic kit only handles founder notifications and contact list management. Wh
    ```
 4. Install `@react-email/components` and `react-email`
 
+> **RESEND_FROM_EMAIL display name trick:** Resend only requires the sending _domain_ to be verified — not the product-specific address. Set `RESEND_FROM_EMAIL=Product Name <hello@modrynstudio.com>` and the display name in the recipient's email client shows "Product Name". The actual sending address is `hello@modrynstudio.com`. This lets all products share one verified domain without confusing recipients.
+
 > **Don't add a "you're signed up" confirmation email to the basic signup kit.** The inline success state already confirms it. A cold transactional email from a brand someone just discovered goes straight to spam and adds complexity for zero conversion benefit. Add it only when you have a specific reason — e.g. delivering a product, sending a magic link, or running a drip sequence.
+
+**Product email address (Google Workspace "Send mail as"):**
+
+To make emails _appear_ to come from a product address like `hello@[product-domain]` — both for user-facing transactional email and for contact forms on the terms/privacy pages — set up a "Send mail as" alias in Google Workspace:
+
+1. **Google Workspace admin** — add `hello@[product-domain]` as an alias on your account (or as a routing rule that delivers to your inbox)
+2. **Gmail settings** → Accounts → "Send mail as" → Add another email address → enter `hello@[product-domain]` → SMTP server: `smtp.gmail.com`, port 587, your Google Workspace credentials
+3. Verify the alias — Google sends a confirmation code to the alias address (it should route to your inbox via step 1)
+4. Once verified, Gmail lets you compose _from_ `hello@[product-domain]`
+
+For **Resend**: Resend requires domain verification via DNS TXT/CNAME records. Verify `[product-domain]` in the Resend dashboard (Domains → Add Domain) and update `RESEND_FROM_EMAIL` to use the new domain. Until you do this, use the `modrynstudio.com` display-name trick above.
 
 ### MCP Servers
 
@@ -348,7 +407,8 @@ The basic kit only handles founder notifications and contact list management. Wh
 │   ├── log.prompt.md              ← /log (reusable)
 │   ├── seo.prompt.md              ← /seo (once)
 │   ├── launch.prompt.md           ← /launch (once)
-│   └── polish.prompt.md           ← /polish (reusable)
+│   ├── polish.prompt.md           ← /polish (reusable)
+│   └── notify.prompt.md           ← /notify (reusable)
 .vscode/
 ├── settings.json                  ← Agent mode, formatOnSave, Prettier default formatter
 ├── extensions.json                ← Recommends Prettier on first open
@@ -358,7 +418,8 @@ src/config/
 src/lib/
 ├── cn.ts                          ← Tailwind class merge utility
 ├── route-logger.ts                ← API route logging (createRouteLogger)
-└── analytics.ts                   ← Vercel Analytics event tracking (analytics.track)
+├── analytics.ts                   ← Vercel Analytics event tracking (analytics.track)
+└── notify.ts                      ← Founder notifications via Gmail SMTP (sendNotification, notifyHtml)
 src/components/ui/
 ├── button.tsx                     ← Shared button primitive (3 variants, 3 sizes)
 ├── input.tsx                      ← Shared input primitive (forwardRef)
