@@ -30,8 +30,8 @@ Also fill in `src/config/site.ts` — replace every `TODO:` placeholder with rea
 - `cta` -- short CTA button label (5--8 words) for the OG image pill; pull from brand's primary action or pricing copy (e.g. `'Get your plan for $9 →'`, `'Start for free →'`)
 - `founder` — from context.md or default to "Luke Hanner"
 - `accent` / `bg` — brand colors from brand.md (hex values)
-- `social.twitter` / `social.twitterHandle` — X/Twitter profile URL and handle (e.g. `@lukehanner`) from the Social Profiles section of context.md
-- `social.github` — GitHub URL from the Social Profiles section of context.md
+- `social.twitter` / `social.twitterHandle` — set from the **Social Profiles** section of context.md only if a brand account is explicitly listed. **If no brand account exists yet, leave both as `null`.** Never set these to a personal handle — the social fields are for the product's brand identity, not Luke's personal accounts.
+- `social.github` — not a user-facing field for consumer products. Do not add it. If it exists in `site.social`, remove it.
 - Any other social entries listed in context.md (e.g. `devto`, `shipordie`) — uncomment the corresponding lines in `site.social` and populate them
 
 Do not modify any section without a `<!-- TODO -->` marker.
