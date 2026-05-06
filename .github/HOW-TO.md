@@ -193,6 +193,8 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 | `/notify`      | Reusable  | Scans all API routes, adds founder notifications to any event that doesn't have one yet                                                                               |
 | `/email-setup` | Once      | Guided email setup: Gmail app password, Resend, notify.ts wiring, optional transactional email                                                                        |
 | `@check`       | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                          |
+| `/test`        | Reusable  | Full e2e test of the money loop — agent executes autonomously: form, payment, generation, DB, recipient page, double-submit. Fill in CONFIGURE block first.            |
+| `/issues`      | Reusable  | Syncs `docs/issues.md` from GitHub live — run before planning sessions or after a batch of issue changes                                                               |
 | `@prebuild`    | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md`                                                                                               |
 | `/deploy`      | Once      | Pre-deploy checklist: verifies basePath, runs build, outputs config for modryn-studio-v2 (run from this repo)                                                         |
 | `/social`      | Reusable  | Generates launch/milestone copy (X, Reddit, shipordie) using voice rules — **modryn-studio-v2 only**                                                                  |
