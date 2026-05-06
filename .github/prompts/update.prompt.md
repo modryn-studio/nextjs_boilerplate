@@ -1,10 +1,10 @@
 ---
 name: update
-description: Re-reads context.md, brand.md, and development-principles.md and cascades any changes into copilot-instructions.md, site.ts, and next.config.ts
+description: Re-reads context.md and brand.md and cascades any changes into copilot-instructions.md, site.ts, and next.config.ts
 agent: agent
 ---
 
-`context.md`, `brand.md`, and `development-principles.md` are the source of truth for this project. This command cascades any edits from those files into the derived files that `/setup` originally populated.
+`context.md` and `brand.md` are the source of truth for this project. This command cascades any edits from those files into the derived files that `/setup` originally populated.
 
 Run this any time you edit `context.md` or `brand.md`. Do not run `/setup` again — that re-runs setup steps (wiring components, installing packages) that should only happen once.
 
@@ -12,11 +12,10 @@ Run this any time you edit `context.md` or `brand.md`. Do not run `/setup` again
 
 ## Step 1: Read the source files
 
-Read all three source files:
+Read both source files:
 
 1. `context.md` — product name, URL, target user, stack, routes, monetization, analytics events
 2. `brand.md` — voice rules, visual rules, user types, emotional arc, copy examples
-3. `development-principles.md` — product philosophy (rarely changes, but check it)
 
 ---
 
