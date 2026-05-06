@@ -193,21 +193,21 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 
 ### Reusable vs. One-Time Commands
 
-| Command     | Frequency | What it does                                                                                                                                                          |
-| ----------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/setup`    | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs                                                                                                          |
-| `/update`   | Reusable  | Cascades source doc edits into derived files                                                                                                                          |
+| Command     | Frequency | What it does                                                                                                                                                 |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/setup`    | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs                                                                                                |
+| `/update`   | Reusable  | Cascades source doc edits into derived files                                                                                                                 |
 | `/validate` | Reusable  | Reads `context.md`, `brand.md`, `strategy.md` + web-searches to validate. **Agent mode only.** Phase 1: run open-ended. Phase 4+: add focus question in same message. |
-| `/assets`   | Reusable  | Generates favicons, icons, banner from logomark                                                                                                                       |
-| `/tool`     | Reusable  | Registers/updates tool on modrynstudio.com (`building` → `live`)                                                                                                      |
-| `/log`      | Reusable  | Drafts a build log post — run at every milestone                                                                                                                      |
-| `/deps`     | Reusable  | Validates dependencies against live docs                                                                                                                              |
-| `/seo`      | Once      | SEO audit + Search Console + Bing setup                                                                                                                               |
-| `/launch`   | Once      | Distribution checklist: sharing hooks, OG, social prep                                                                                                                |
-| `/polish`   | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets                                                                              |
-| `/notify`   | Reusable  | Scans all API routes, adds founder notifications to any event that doesn't have one yet                                                                               |
-| `@check`    | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                          |
-| `@prebuild` | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md`                                                                                               |
+| `/assets`   | Reusable  | Generates favicons, icons, banner from logomark                                                                                                              |
+| `/tool`     | Reusable  | Registers/updates tool on modrynstudio.com (`building` → `live`)                                                                                            |
+| `/log`      | Reusable  | Drafts a build log post — run at every milestone                                                                                                             |
+| `/deps`     | Reusable  | Validates dependencies against live docs                                                                                                                     |
+| `/seo`      | Once      | SEO audit + Search Console + Bing setup                                                                                                                      |
+| `/launch`   | Once      | Distribution checklist: sharing hooks, OG, social prep                                                                                                      |
+| `/polish`   | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets                                                                     |
+| `/notify`   | Reusable  | Scans all API routes, adds founder notifications to any event that doesn't have one yet                                                                      |
+| `@check`    | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                |
+| `@prebuild` | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md`                                                                                     |
 
 > **modryn-studio-v2 only:** `/deploy` and `/social` exist only in that repo. Switch workspaces to run them.
 
@@ -231,10 +231,10 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 
 ### VS Code Modes
 
-| Mode      | When to use                         | How                   |
-| --------- | ----------------------------------- | --------------------- |
-| **Ask**   | Quick questions about your codebase | Chat → select "Ask"   |
-| **Plan**  | Blueprint a feature before building | Chat → select "Plan"  |
+| Mode      | When to use                         | How                  |
+| --------- | ----------------------------------- | -------------------- |
+| **Ask**   | Quick questions about your codebase | Chat → select "Ask"  |
+| **Plan**  | Blueprint a feature before building | Chat → select "Plan" |
 | **Agent** | Build, edit files, run commands     | Chat → select "Agent" |
 
 Open chat: `Ctrl+Alt+I`
@@ -252,15 +252,15 @@ The script auto-detects whether your mark is colored or grayscale and generates 
 
 **What gets generated:**
 
-| File                      | Purpose                                                                            |
-| ------------------------- | ---------------------------------------------------------------------------------- |
+| File                      | Purpose                                                                        |
+| ------------------------- | ------------------------------------------------------------------------------ |
 | `public/favicon.svg`      | Primary favicon — embeds both PNGs, switches via `prefers-color-scheme` in the SVG |
-| `public/icon-light.png`   | PNG fallback for browsers without SVG favicon support                              |
-| `public/icon-dark.png`    | PNG fallback (dark variant)                                                        |
-| `src/app/favicon.ico`     | Safari browser tab + legacy fallback — Next.js file convention                     |
-| `src/app/icon.png`        | 1024×1024 — required for auto-generated webmanifest                                |
-| `src/app/apple-icon.png`  | iOS "Add to Home Screen" — Next.js file convention                                 |
-| `public/brand/banner.png` | README header (auto-generated if absent)                                           |
+| `public/icon-light.png`   | PNG fallback for browsers without SVG favicon support                          |
+| `public/icon-dark.png`    | PNG fallback (dark variant)                                                    |
+| `src/app/favicon.ico`     | Safari browser tab + legacy fallback — Next.js file convention                 |
+| `src/app/icon.png`        | 1024×1024 — required for auto-generated webmanifest                            |
+| `src/app/apple-icon.png`  | iOS "Add to Home Screen" — Next.js file convention                             |
+| `public/brand/banner.png` | README header (auto-generated if absent)                                       |
 
 OG image is generated at build time by `src/app/opengraph-image.tsx` — not a static file.
 
@@ -295,8 +295,8 @@ Every project ships with a working email system out of the box. Two services, tw
 GMAIL_USER=you@gmail.com
 GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx   # Gmail app password — NOT your account password
 FEEDBACK_TO=you@gmail.com               # Where founder notifications land (defaults to GMAIL_USER)
-RESEND_API_KEY=re_xxxx                  # Adds signups to your Resend audience
-RESEND_SEGMENT_ID=                      # Optional — tags signups to a named segment in Resend
+RESEND_API_KEY=re_xxxx                   # Adds signups to your Resend audience
+RESEND_SEGMENT_ID=                       # Optional — tags signups to a named segment in Resend
 ```
 
 > **Gmail app password:** Go to myaccount.google.com → Security → 2-Step Verification → App passwords. Generate one for "Mail". Use that 16-character code, not your Gmail password.
@@ -381,7 +381,25 @@ For **Resend**: Resend requires domain verification via DNS TXT/CNAME records. V
 
 ### MCP Servers
 
-- **GitHub** — create issues, PRs, manage repos from chat
+MCP servers give Copilot access to external tools — Stripe, GitHub, Neon — directly from chat.
+
+**GitHub** — install via the VS Code Extension Gallery (search "GitHub MCP"). Once installed, it connects globally. No entry needed in `.vscode/mcp.json`.
+
+> **Don't add a `github` entry to `.vscode/mcp.json`.** The gallery extension already registers it globally. Adding it again causes duplicate GitHub servers in every project.
+
+**Neon** — add once to your global `mcp.json` (`C:\\Users\\{you}\\AppData\\Roaming\\Code\\User\\mcp.json`):
+```json
+"Neon": {
+  "type": "http",
+  "url": "https://mcp.neon.tech/mcp",
+  "headers": { "Authorization": "Bearer YOUR_NEON_API_KEY" }
+}
+```
+Get your Neon API key at [neon.tech](https://neon.tech) → Account → API Keys.
+
+**Stripe** — configured per-project. `scripts/stripe-mcp.js` reads `STRIPE_SECRET_KEY` from `.env.local` at startup and passes it to `@stripe/mcp`. The key is never committed. `.vscode/mcp.json` points to this script.
+
+To activate: open the MCP panel → start `Stripe`. To switch keys (test ↔ live), update `.env.local` and restart the `Stripe` server.
 
 ### File Map
 
@@ -412,7 +430,7 @@ For **Resend**: Resend requires domain verification via DNS TXT/CNAME records. V
 .vscode/
 ├── settings.json                  ← Agent mode, formatOnSave, Prettier default formatter
 ├── extensions.json                ← Recommends Prettier on first open
-└── mcp.json                       ← MCP server config (GitHub)
+└── mcp.json                       ← MCP server config (Stripe — reads key from .env.local)
 src/config/
 └── site.ts                        ← Derived — site name, URL, colors, social links (edit via /update)
 src/lib/
@@ -425,7 +443,8 @@ src/components/ui/
 ├── input.tsx                      ← Shared input primitive (forwardRef)
 └── textarea.tsx                   ← Shared textarea primitive (forwardRef)
 scripts/
-└── generate-assets.ps1            ← Asset generator (run via /assets)
+├── generate-assets.ps1            ← Asset generator (run via /assets)
+└── stripe-mcp.js                  ← Stripe MCP wrapper — reads STRIPE_SECRET_KEY from .env.local
 context.md                         ← SOURCE OF TRUTH: product, stack, routes, monetization
 brand.md                           ← SOURCE OF TRUTH: voice, visuals, user types, copy
 development-principles.md          ← SOURCE OF TRUTH: product philosophy (permanent)
