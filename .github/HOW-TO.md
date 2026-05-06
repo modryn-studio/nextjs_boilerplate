@@ -37,18 +37,29 @@ One-time setup. Run these in order when starting a new project.
 
 ---
 
-## Phase 2: Go Live
+## Phase 2: Validate Before You Build
 
-Get a URL as fast as possible. A live site — even a landing page — is worth more than a perfect local prototype. It unlocks tracking, distribution, and public accountability.
+Fish for demand before writing product code. The video and landing page are the fishing rod. Pre-orders are the fish.
 
-**Build your public footprint first:**
+**Build your public footprint:**
 
 1. Run `/tool` — registers the tool on modrynstudio.com with `status: "building"`. Merge the PR right away.
 2. Run `/log` — first build log post. Document the idea, the origin, the plan. Merge the PR.
-3. **If there's a paid tier planned: add a founding member price now.** Email = curiosity. Pre-order = validation. Even $4.99 proves someone will exchange money, not just attention. Wire Stripe checkout before the core product exists and link it from the hero CTA. Worst case: zero buyers and you learned something before writing a line of core product code. (Paul Buchheit to YC founders: "Go sell the product ASAP before wasting time building it.")
-4. **Once you have 5+ pre-orders or serious signups: schedule calls.** Don't wait until launch. One 20-minute call with a real buyer reveals more than 100 passive signups. Ask: what's their current system, what have they tried, what made them act? The real product core surfaces here — not from what you planned to build.
 
-> `/tool` only needs `status: "building"` — you don't need a live product URL yet. Every day the listing exists is a day Google can index it. Every log post is content that compounds.
+> Every day the listing exists is a day Google can index it. Every log post is content that compounds.
+
+**Build the validation instrument:**
+
+3. Build a demo of the core deliverable — a sample output, a generated example, a screenshot. Whatever the buyer would actually receive. You do not need the full product built. You need something real to show.
+4. Record a 30–45 second video per Ogilvy's script. Phone shot is fine. Ship within 48 hours of greenlight.
+5. Build the pre-order landing page: visible price ($9–$29), one CTA, Stripe checkout wired. **Go live the same day as the video.**
+
+> The landing page is not polish — it is the demand test.
+
+**Measure:**
+
+6. Watch for 7 days. Micro-signals first (saves, shares, watch completion), then pre-orders. **50 pre-orders = greenlight to build.** Zero signal = park it cleanly and move on. (Paul Buchheit: "Go sell the product ASAP before wasting time building it.")
+7. **Schedule calls at 5+ pre-orders.** One 20-minute call with a real buyer reveals more than 100 passive signups. Ask: what's their current system, what have they tried, what made them act?
 
 **Deploy — two paths based on your deployment mode:**
 
@@ -59,12 +70,12 @@ Get a URL as fast as possible. A live site — even a landing page — is worth 
   4. Set `mode: standalone-domain` and `url:` in `context.md` → run `/update`
 
 - **Subdirectory on modrynstudio.com** (default for most tools) →
-  1. Deploy to Vercel (note the `.vercel.app` URL) — **this includes a landing page. You don't need a finished product. Any live page at the Vercel URL is enough.**
-  2. Switch back to **modryn-studio-v2** in VS Code
-  3. Run `/deploy` — adds the rewrite wiring `modrynstudio.com/tools/[slug]/*` → your Vercel URL
+  1. Deploy to Vercel (note the `.vercel.app` URL) — any live page is enough.
+  2. Run `/deploy` from this repo — pre-deploy checklist, outputs config for modryn-studio-v2.
+  3. Switch to **modryn-studio-v2** and apply the output → adds the rewrite `modrynstudio.com/tools/[slug]/*` → your Vercel URL.
   4. Set `mode: modryn-app` and `url:` in `context.md` → run `/update`
 
-  > `status: "building"` + active rewrite is the standard state while the product is in development. The rewrite stays in `next.config.ts` throughout — when the real product ships, it replaces the landing page at the same Vercel URL and the rewrite keeps working with no changes needed in modryn-studio-v2.
+  > `status: "building"` + active rewrite is the standard state during development. When the real product ships at the same Vercel URL, the rewrite keeps working — no changes needed in modryn-studio-v2.
 
 ---
 
@@ -86,39 +97,21 @@ At this point you have: a live site, tracking, SEO filed, a public tool listing,
 
 ## Phase 4: Build the Core
 
-Now build the one killer feature. Wire the complete flow end-to-end — from user input to delivered output. Not ten features. One.
-
-### Minimum Money Loop
-
-Wire the complete loop end-to-end before polishing any single piece. One real order through the whole system beats a perfect intake with no delivery.
+You're here because demand is confirmed. Wire the complete flow end-to-end before polishing any single piece. One real order through the whole system beats a perfect intake with no delivery.
 
 Open `context.md` → find `## Minimum Money Loop` → keep it visible. Every build session, ask: _does this work advance the loop, or is it polish?_
 
-**Default rule: the landing page and the video go live on the same day. This is not optional.**
-
-The landing page is not polish — it is the demand test. The Modryn Loop validates with a pre-order page before the product is finished, not after. A live page with a $9 CTA and a same-day video is the instrument. The money loop closes after demand is proven, not before.
-
-Sequence for every product:
-
-1. Build the core deliverable surface (the recipient page, the output page — whatever the buyer sends to someone else)
-2. Record the video per Ogilvy's script
-3. Build the landing page with locked copy and $9 CTA
-4. Go live — video posted and landing page live same day
-5. Wire the money loop after 50 pre-orders confirm demand
-
-**Exception — put output on the page first if you already have it:** If you have real examples of the finished result before the feature is built (audio samples, screenshots, a completed demo), add them to the landing page _before_ building the ordering flow. That's not polish — it's the conversion mechanism, and it can't wait. The rule is: don't build UI you don't need yet. Real output you already have is never wasted.
-
-**The dev loop:**
+### Dev Loop
 
 - `Ctrl+Shift+B` — starts the dev server, pipes output to `dev.log`. Tell Copilot **"check logs"** at any point.
 - Edit `context.md` or `brand.md` → run `/update` immediately. Skipping this means Copilot works off stale context.
 - Run `/deps` if you're unsure whether a package is current.
 
-**Before a major implementation:**
+### Before a Major Implementation
 
 **Scan GitHub for reference implementations.** Before building any non-trivial feature — backend service, data pipeline, integration, complex UI pattern — spend 20 minutes reading 2-3 open-source repos that have solved a similar problem. You're not looking for code to copy. You're looking for patterns to borrow and mistakes to skip.
 
-How to search: use `mcp_github_search_repositories` with short 2-3 word queries (multi-word phrases return zero results). Read the root directory listing, then `README.md` + the main entry file. That's usually enough to understand the architecture.
+How to search: use `mcp_github_search_repositories` with short 2-3 word queries (multi-word phrases return zero results). Read the root directory listing, then `README.md` + the main entry file.
 
 What to extract:
 
@@ -127,34 +120,26 @@ What to extract:
 - **Core algorithm or pattern** — what's the non-obvious decision at the center of this thing?
 - **What they skipped** — scope they punted on that you might need (or should also skip)
 
-Drop your findings in a `docs/` note before writing a line of code. One file, bullet points. It becomes the implicit spec you build against.
+Drop your findings in a `docs/` note before writing a line of code. One file, bullet points. Drag it into chat or reference it with `#file:docs/your-reference.md` at the start of the build session.
 
-To use it during a build session: drag the file into chat or type `#file:docs/your-reference.md` in your first message. It's research scaffolding — not a source doc, not maintained after the feature ships.
+Run `/validate` with a focus area — **Agent mode only**:
 
-Run `/validate` with a focus area. The mechanics matter — this only works correctly in **Agent mode**:
-
-1. Type `/validate` in the chat input — VS Code will show a dropdown suggesting the prompt. Select it so the prompt file actually loads.
+1. Type `/validate` in chat — VS Code will show a dropdown. Select it so the prompt file actually loads.
 2. In the **same message**, after the slash command, add your focus question.
-3. Submit. The agent runs the full prompt file + your focus question with live web search.
+3. Submit. The agent runs the full prompt + your question with live web search.
 
-Example messages:
+Example: `/validate — validate my approach to [feature]. Is this the right pattern for this user type?`
 
-- `/validate — validate my approach to the [feature] before I build it. Is this the right pattern for this user type?`
-- `/validate — validate whether the pricing is still in the right range given what competitors are doing`
-- `/validate — validate my plan to build [feature] next. What should I know about how competitors handle this?`
+> If the output looks entirely offline (no fetched URLs, no live competitor data cited): you're in Ask or Plan mode. Switch to Agent and run again.
 
-**If the output looks entirely offline** (no fetched URLs, no live competitor data cited): you're in Ask or Plan mode, not Agent mode. Switch to Agent and run again.
+### When You're Stuck
 
-**When you're stuck:**
-
-Getting stuck is normal. Here's the playbook:
-
-1. **Research** — do competitor analysis. Screenshot their flows. Read their reviews. Share findings with Copilot.
-2. **Revalidate** — run `/validate` focused on the area you're stuck on. "Validate my competitor positioning given what I found."
-3. **Plan** — switch to **Plan** mode in chat. Hash out the architecture or approach before switching back to Agent to build.
+1. **Research** — competitor analysis. Screenshot their flows. Read their reviews. Share with Copilot.
+2. **Revalidate** — run `/validate` focused on the area you're stuck on.
+3. **Plan** — switch to **Plan** mode. Hash out the architecture before switching back to Agent to build.
 4. **Roadmap** — share your research + ask Copilot for a mini roadmap. Implement one step at a time.
 
-**After a major implementation:**
+### After a Major Implementation
 
 Run **`@check`** as a quality gate. Then push.
 
@@ -193,23 +178,26 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 
 ### Reusable vs. One-Time Commands
 
-| Command     | Frequency | What it does                                                                                                                                                 |
-| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `/setup`    | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs                                                                                                |
-| `/update`   | Reusable  | Cascades source doc edits into derived files                                                                                                                 |
-| `/validate` | Reusable  | Reads `context.md`, `brand.md`, `strategy.md` + web-searches to validate. **Agent mode only.** Phase 1: run open-ended. Phase 4+: add focus question in same message. |
-| `/assets`   | Reusable  | Generates favicons, icons, banner from logomark                                                                                                              |
-| `/tool`     | Reusable  | Registers/updates tool on modrynstudio.com (`building` → `live`)                                                                                            |
-| `/log`      | Reusable  | Drafts a build log post — run at every milestone                                                                                                             |
-| `/deps`     | Reusable  | Validates dependencies against live docs                                                                                                                     |
-| `/seo`      | Once      | SEO audit + Search Console + Bing setup                                                                                                                      |
-| `/launch`   | Once      | Distribution checklist: sharing hooks, OG, social prep                                                                                                      |
-| `/polish`   | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets                                                                     |
-| `/notify`   | Reusable  | Scans all API routes, adds founder notifications to any event that doesn't have one yet                                                                      |
-| `@check`    | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                |
-| `@prebuild` | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md`                                                                                     |
+| Command        | Frequency | What it does                                                                                                                                                          |
+| -------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/setup`       | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs                                                                                                          |
+| `/update`      | Reusable  | Cascades source doc edits into derived files                                                                                                                          |
+| `/validate`    | Reusable  | Reads `context.md`, `brand.md`, `strategy.md` + web-searches to validate. **Agent mode only.** Phase 1: run open-ended. Phase 4+: add focus question in same message. |
+| `/assets`      | Reusable  | Generates favicons, icons, banner from logomark                                                                                                                       |
+| `/tool`        | Reusable  | Registers/updates tool on modrynstudio.com (`building` → `live`)                                                                                                      |
+| `/log`         | Reusable  | Drafts a build log post — run at every milestone                                                                                                                      |
+| `/deps`        | Reusable  | Validates dependencies against live docs                                                                                                                              |
+| `/seo`         | Once      | SEO audit + Search Console + Bing setup                                                                                                                               |
+| `/launch`      | Once      | Distribution checklist: sharing hooks, OG, social prep                                                                                                                |
+| `/polish`      | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets                                                                              |
+| `/notify`      | Reusable  | Scans all API routes, adds founder notifications to any event that doesn't have one yet                                                                               |
+| `/email-setup` | Once      | Guided email setup: Gmail app password, Resend, notify.ts wiring, optional transactional email                                                                        |
+| `@check`       | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                          |
+| `@prebuild`    | Once      | Pre-build discovery: researches market, fills `context.md` + `brand.md`                                                                                               |
+| `/deploy`      | Once      | Pre-deploy checklist: verifies basePath, runs build, outputs config for modryn-studio-v2 (run from this repo)                                                         |
+| `/social`      | Reusable  | Generates launch/milestone copy (X, Reddit, shipordie) using voice rules — **modryn-studio-v2 only**                                                                  |
 
-> **modryn-studio-v2 only:** `/deploy` and `/social` exist only in that repo. Switch workspaces to run them.
+> **modryn-studio-v2 only:** `/social` exists only in that repo. Switch workspaces to run it.
 
 ### `@check` — When to Run
 
@@ -231,10 +219,10 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 
 ### VS Code Modes
 
-| Mode      | When to use                         | How                  |
-| --------- | ----------------------------------- | -------------------- |
-| **Ask**   | Quick questions about your codebase | Chat → select "Ask"  |
-| **Plan**  | Blueprint a feature before building | Chat → select "Plan" |
+| Mode      | When to use                         | How                   |
+| --------- | ----------------------------------- | --------------------- |
+| **Ask**   | Quick questions about your codebase | Chat → select "Ask"   |
+| **Plan**  | Blueprint a feature before building | Chat → select "Plan"  |
 | **Agent** | Build, edit files, run commands     | Chat → select "Agent" |
 
 Open chat: `Ctrl+Alt+I`
@@ -252,15 +240,15 @@ The script auto-detects whether your mark is colored or grayscale and generates 
 
 **What gets generated:**
 
-| File                      | Purpose                                                                        |
-| ------------------------- | ------------------------------------------------------------------------------ |
+| File                      | Purpose                                                                            |
+| ------------------------- | ---------------------------------------------------------------------------------- |
 | `public/favicon.svg`      | Primary favicon — embeds both PNGs, switches via `prefers-color-scheme` in the SVG |
-| `public/icon-light.png`   | PNG fallback for browsers without SVG favicon support                          |
-| `public/icon-dark.png`    | PNG fallback (dark variant)                                                    |
-| `src/app/favicon.ico`     | Safari browser tab + legacy fallback — Next.js file convention                 |
-| `src/app/icon.png`        | 1024×1024 — required for auto-generated webmanifest                            |
-| `src/app/apple-icon.png`  | iOS "Add to Home Screen" — Next.js file convention                             |
-| `public/brand/banner.png` | README header (auto-generated if absent)                                       |
+| `public/icon-light.png`   | PNG fallback for browsers without SVG favicon support                              |
+| `public/icon-dark.png`    | PNG fallback (dark variant)                                                        |
+| `src/app/favicon.ico`     | Safari browser tab + legacy fallback — Next.js file convention                     |
+| `src/app/icon.png`        | 1024×1024 — required for auto-generated webmanifest                                |
+| `src/app/apple-icon.png`  | iOS "Add to Home Screen" — Next.js file convention                                 |
+| `public/brand/banner.png` | README header (auto-generated if absent)                                           |
 
 OG image is generated at build time by `src/app/opengraph-image.tsx` — not a static file.
 
@@ -276,108 +264,28 @@ Or run directly (requires [ImageMagick](https://imagemagick.org)):
 
 ### Email Setup
 
-Every project ships with a working email system out of the box. Two services, two jobs:
+Two services, two jobs:
 
-| Service                     | Job                                                                                           |
-| --------------------------- | --------------------------------------------------------------------------------------------- |
-| **Gmail SMTP (nodemailer)** | Founder notifications — you get an email when something happens in the product                |
-| **Resend**                  | Audience management — signups are added to your shared Resend contact list, tagged by project |
-
-**What's included without any extra code:**
-
-- `src/app/api/feedback/route.ts` — handles `newsletter`, `feedback`, and `bug` submissions. One route, all three.
-- `src/components/email-signup.tsx` — ready-to-drop signup form. Calls the feedback route with `type: "newsletter"`.
-- `src/lib/notify.ts` — shared helper for sending founder notifications from any API route.
+| Service                     | Job                                                                         |
+| --------------------------- | --------------------------------------------------------------------------- |
+| **Gmail SMTP (nodemailer)** | Founder notifications — you get an email when something happens             |
+| **Resend**                  | Audience management — signups added to your contact list, tagged by project |
 
 **Env vars to set** (copy from `.env.local.example`):
 
 ```bash
 GMAIL_USER=you@gmail.com
-GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx   # Gmail app password — NOT your account password
-FEEDBACK_TO=you@gmail.com               # Where founder notifications land (defaults to GMAIL_USER)
-RESEND_API_KEY=re_xxxx                   # Adds signups to your Resend audience
-RESEND_SEGMENT_ID=                       # Optional — tags signups to a named segment in Resend
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx   # Gmail app password — not your account password
+FEEDBACK_TO=you@gmail.com               # Where notifications land (defaults to GMAIL_USER)
+RESEND_API_KEY=re_xxxx
+RESEND_SEGMENT_ID=                       # optional — tags signups to a named Resend segment
+RESEND_FROM_EMAIL=                       # for user-facing transactional email
+NEXT_PUBLIC_SITE_URL=                    # used to build links inside emails
 ```
 
-> **Gmail app password:** Go to myaccount.google.com → Security → 2-Step Verification → App passwords. Generate one for "Mail". Use that 16-character code, not your Gmail password.
+Run `/email-setup` for a guided walkthrough — checks what's set, walks through Gmail app password and Resend, wires `notify.ts` into routes that are missing notifications, and sets up transactional email templates if needed.
 
-**How the Resend audience works:**
-
-All projects share one Resend account and one audience. Every signup is automatically tagged with `source: site.name` (e.g. `source: "My Project"`). Filter by `source` in the Resend dashboard to see signups per-project — no separate audiences or segments needed.
-
-`RESEND_SEGMENT_ID` is optional. If you want signups from this project to appear in a named Resend segment (e.g. "My Project Waitlist"), create the segment at resend.com → Audience → Segments, copy its ID, and set this var. The code handles it automatically.
-
-**Adding notifications to API routes (notify.ts pattern):**
-
-`src/lib/notify.ts` is the shared notification helper. Call it from any route to send a founder notification when something significant happens.
-
-```typescript
-import { after } from 'next/server';
-import { sendNotification, notifyHtml } from '@/lib/notify';
-import { site } from '@/config/site';
-
-// Fire-and-forget after response is sent — use after() when the notification
-// must not delay the response (payments, form submissions, user-facing actions)
-after(() =>
-  sendNotification(
-    `🎁 [${site.name}] Something happened`,
-    notifyHtml('🎁 Something happened', [
-      ['Key', 'value'],
-      ['Key', 'value'],
-    ])
-  )
-);
-
-// Or void for non-critical paths where after() isn't available
-void sendNotification(subject, html);
-```
-
-`sendNotification` never throws — it silently no-ops if `GMAIL_USER`/`GMAIL_APP_PASSWORD` are not set. Safe to call anywhere.
-
-**When to notify (good events):**
-
-- New order / checkout started
-- Payment captured
-- Core product delivered (song generated, report ready, etc.)
-- Generation failed after payment (needs manual action)
-- Recipient opened the thing
-- Reaction / engagement captured
-
-**When not to notify:**
-
-- Polling routes (`GET` returning `status: 'pending'`)
-- Validation errors — use `log.warn()` instead
-- Events that will fire hundreds of times per hour (use a threshold or rate-limit)
-
-**Run `/notify` after adding new routes** to automatically wire notifications into any route that doesn't have them yet.
-
-**The upgrade path — transactional email (Resend → users):**
-
-The basic kit sends emails _to you_ (founder notifications). When a project needs to send emails _to users_ (order confirmations, delivery, etc.), add:
-
-1. `src/emails/your-template.tsx` — React Email template (`@react-email/components`)
-2. A route that calls `resend.emails.send()` with that template
-3. Fill in these two vars (already in `.env.local.example` as stubs):
-   ```bash
-   RESEND_FROM_EMAIL=Your Project <hello@modrynstudio.com>  # modrynstudio.com is already verified in Resend
-   NEXT_PUBLIC_SITE_URL=https://yourdomain.com              # Used to build links inside emails
-   ```
-4. Install `@react-email/components` and `react-email`
-
-> **RESEND_FROM_EMAIL display name trick:** Resend only requires the sending _domain_ to be verified — not the product-specific address. Set `RESEND_FROM_EMAIL=Product Name <hello@modrynstudio.com>` and the display name in the recipient's email client shows "Product Name". The actual sending address is `hello@modrynstudio.com`. This lets all products share one verified domain without confusing recipients.
-
-> **Don't add a "you're signed up" confirmation email to the basic signup kit.** The inline success state already confirms it. A cold transactional email from a brand someone just discovered goes straight to spam and adds complexity for zero conversion benefit. Add it only when you have a specific reason — e.g. delivering a product, sending a magic link, or running a drip sequence.
-
-**Product email address (Google Workspace "Send mail as"):**
-
-To make emails _appear_ to come from a product address like `hello@[product-domain]` — both for user-facing transactional email and for contact forms on the terms/privacy pages — set up a "Send mail as" alias in Google Workspace:
-
-1. **Google Workspace admin** — add `hello@[product-domain]` as an alias on your account (or as a routing rule that delivers to your inbox)
-2. **Gmail settings** → Accounts → "Send mail as" → Add another email address → enter `hello@[product-domain]` → SMTP server: `smtp.gmail.com`, port 587, your Google Workspace credentials
-3. Verify the alias — Google sends a confirmation code to the alias address (it should route to your inbox via step 1)
-4. Once verified, Gmail lets you compose _from_ `hello@[product-domain]`
-
-For **Resend**: Resend requires domain verification via DNS TXT/CNAME records. Verify `[product-domain]` in the Resend dashboard (Domains → Add Domain) and update `RESEND_FROM_EMAIL` to use the new domain. Until you do this, use the `modrynstudio.com` display-name trick above.
+Run `/notify` after adding new routes to wire notifications into any event that doesn't have one yet.
 
 ### MCP Servers
 
@@ -388,6 +296,7 @@ MCP servers give Copilot access to external tools — Stripe, GitHub, Neon — d
 > **Don't add a `github` entry to `.vscode/mcp.json`.** The gallery extension already registers it globally. Adding it again causes duplicate GitHub servers in every project.
 
 **Neon** — add once to your global `mcp.json` (`C:\\Users\\{you}\\AppData\\Roaming\\Code\\User\\mcp.json`):
+
 ```json
 "Neon": {
   "type": "http",
@@ -395,9 +304,10 @@ MCP servers give Copilot access to external tools — Stripe, GitHub, Neon — d
   "headers": { "Authorization": "Bearer YOUR_NEON_API_KEY" }
 }
 ```
+
 Get your Neon API key at [neon.tech](https://neon.tech) → Account → API Keys.
 
-**Stripe** — configured per-project. `scripts/stripe-mcp.js` reads `STRIPE_SECRET_KEY` from `.env.local` at startup and passes it to `@stripe/mcp`. The key is never committed. `.vscode/mcp.json` points to this script.
+**Stripe** — configured per-project. `scripts/stripe-mcp.js` reads `STRIPE_SECRET_KEY` from `.env.local` at startup. The key is never committed. `.vscode/mcp.json` points to this script.
 
 To activate: open the MCP panel → start `Stripe`. To switch keys (test ↔ live), update `.env.local` and restart the `Stripe` server.
 
@@ -426,7 +336,9 @@ To activate: open the MCP panel → start `Stripe`. To switch keys (test ↔ liv
 │   ├── seo.prompt.md              ← /seo (once)
 │   ├── launch.prompt.md           ← /launch (once)
 │   ├── polish.prompt.md           ← /polish (reusable)
-│   └── notify.prompt.md           ← /notify (reusable)
+│   ├── notify.prompt.md           ← /notify (reusable)
+│   ├── email-setup.prompt.md      ← /email-setup (once per project)
+│   └── deploy.prompt.md           ← /deploy (once, modryn-app mode only)
 .vscode/
 ├── settings.json                  ← Agent mode, formatOnSave, Prettier default formatter
 ├── extensions.json                ← Recommends Prettier on first open
