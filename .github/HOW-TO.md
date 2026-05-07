@@ -14,15 +14,19 @@ One-time setup. Run these in order when starting a new project.
    git clone https://github.com/modryn-studio/nextjs_boilerplate [YOUR_PROJECT_NAME]
    cd [YOUR_PROJECT_NAME]
    ```
-3. Reset the git history and point to the new repo (this gives you a clean 1-commit start — cloning brings all boilerplate history along otherwise):
+3. Reset git history, wire to the new repo, and create the `dev` branch — one script, run once:
    ```powershell
+   $repo = Read-Host "Repo name (e.g. my-project)"
    Remove-Item -Recurse -Force .git
    git init -b main
    git add -A
    git commit -m "init"
-   git remote add origin https://github.com/modryn-studio/YOUR-REPO
+   git remote add origin "https://github.com/modryn-studio/$repo"
    git push -u origin main
+   git checkout -b dev
+   git push -u origin dev
    ```
+   From this point: never commit directly to `main`. Build on `dev`. Cut short-lived `feat/*` branches from `dev` for larger features if you want isolation. When `dev` is stable and shippable, open a PR to merge into `main` (= a release).
 4. Run `npm install`
 5. **Discovery** — two paths:
    - **Starting from scratch** → Open chat (`Ctrl+Alt+I`), select **Agent** mode, pick **@prebuild**. Describe the idea. It researches, validates, and fills `context.md` + `brand.md` when you say "fill it in."
@@ -30,7 +34,7 @@ One-time setup. Run these in order when starting a new project.
 6. Run `/validate` — web-searches competitors, user pain, SEO opportunity, and brand positioning. Go back and forth. Update `context.md` and `brand.md` based on findings.
 7. Type `/setup` — reads source docs, fills in `copilot-instructions.md` + `src/config/site.ts`. Start the dev server (`Ctrl+Shift+B`) and check the basic landing page in your browser.
 8. Create or drop your logomark at `public/brand/logomark.png`. The file must be 1024×1024 — use ImageMagick to pad if needed: `magick logomark.png -gravity center -background none -extent 1024x1024 logomark.png`
-9. Run `/assets` — generates all favicons, icons, and banner. Push to `main`. Then verify the favicon shows up in the browser tab.
+9. Run `/assets` — generates all favicons, icons, and banner. Push to `dev`. Then verify the favicon shows up in the browser tab.
 10. Run `/deps` — validates all dependencies against live docs, surfaces breaking API changes.
 
 > After setup, **never edit `copilot-instructions.md` or `site.ts` directly**. Edit the source docs → run `/update`.
