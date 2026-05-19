@@ -1,10 +1,10 @@
 ---
 name: issues
-description: "Syncs docs/issues.md from GitHub — fetches all open issues via MCP and rewrites the local snapshot. Run before planning sessions or after a batch of issue changes."
+description: 'Syncs docs/issues.md from GitHub — fetches all open and closed issues via MCP and rewrites the local snapshot. Run before planning sessions or after a batch of issue changes.'
 agent: agent
 ---
 
-Sync `docs/issues.md` with the current open issues on GitHub. Fetch live, overwrite local. Do not guess or use cached knowledge — pull from GitHub directly.
+Sync `docs/issues.md` with the current issues on GitHub. Fetch live, overwrite local. Do not guess or use cached knowledge — pull from GitHub directly.
 
 ---
 
@@ -12,61 +12,58 @@ Sync `docs/issues.md` with the current open issues on GitHub. Fetch live, overwr
 
 Read `copilot-instructions.md` (or `.github/copilot-instructions.md`) to get the GitHub repo owner and name. If not found there, check `package.json` for a `repository` field.
 
-Expected format: `owner: modryn-studio`, `repo: [current project repo name]`.
-
 ---
 
-## Step 2: Fetch all open issues
+## Step 2: Fetch issues
 
-Use `mcp_github_list_issues` (or equivalent GitHub MCP tool) with:
-- `state: "open"`
-- `per_page: 100`
-- Fetch page 2 if the first page returns exactly 100
+Use `mcp_github_list_issues` (or equivalent GitHub MCP tool) twice:
 
-For each issue, collect:
-- Number
-- Title
-- Labels (names only)
-- Created date (format: Month D, YYYY — e.g. "May 4, 2026")
-- Body (full text)
+- First call: `state: "open"`, `per_page: 100`, sorted by number ascending
+- Second call: `state: "closed"`, `per_page: 100`, sorted by number ascending
+- Fetch page 2 of either if the first page returns exactly 100
+
+For open issues collect: number, title, labels, created date, body.
+For closed issues collect: number, title only.
 
 ---
 
 ## Step 3: Overwrite docs/issues.md
 
-Write the file using this exact format — no deviations:
+Write the file using this exact format:
 
 ```
-# Open Issues
+# Issues
 
-_Last updated: [Today's date] — [N] issues open_
+_Last updated: [Today's date] — [N] open_
 
 ---
 
 ## [#[number] — [title]](https://github.com/[owner]/[repo]/issues/[number])
 
-**Labels:** [comma-separated label names, or "none"]
-**Opened:** [Month D, YYYY]
+**Labels:** [comma-separated label names, or "none"] | **Opened:** [Month D, YYYY]
 
-[Full issue body, verbatim. Preserve line breaks. Do not summarize.]
+1–2 sentence summary: what it is and the key dependency or blocker if there is one.
 
 ---
 
-## [#[number] — ...]
+## Closed
+
+- [#[number] — [title]](https://github.com/[owner]/[repo]/issues/[number])
 ```
 
 Rules:
-- Sort by issue number ascending
-- Every open issue gets a full entry — do not truncate or summarize the body
-- Preserve all markdown in the body (bold, lists, code blocks, links)
-- The `---` divider goes between issues, not after the last one
-- If an issue has no body, write: _(no description)_
-- Update the count in the `_Last updated_` line to match the actual number of issues fetched
+
+- Open issues: sort by number ascending, one `---` divider between entries (not after the last)
+- Open issue summary: distill from the body — what it is + key dependency/blocker only. 1–2 sentences. No full body verbatim.
+- If an open issue has no body, write: _(no description)_
+- Closed issues: title-linked list under `## Closed`, sorted by number ascending. No body, no labels, no date.
+- If there are no closed issues, write: `_None yet._` under `## Closed`
+- Update the count in the `_Last updated_` line to match open issues only
 
 ---
 
 ## Step 4: Report
 
-Print one line: `docs/issues.md updated — [N] open issues synced from GitHub.`
+Print one line: `docs/issues.md updated — [N] open, [M] closed.`
 
 If the GitHub MCP tools are unavailable, stop and tell Luke: "GitHub MCP not available — reload VS Code to activate the server, then run /issues again."

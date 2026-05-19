@@ -32,11 +32,6 @@ If `context.md` has no social profiles filled in, ask the user for their X/Twitt
 <a href={site.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
 ```
 
-**Modryn Studio footer credit** — check whether the footer copyright includes a link to `modrynstudio.com`. If not, update it:
-```tsx
-© {new Date().getFullYear()} {site.name} · <a href="https://modrynstudio.com" target="_blank" rel="noopener noreferrer">Modryn Studio</a>
-```
-
 **Sharing hook at outcome** — check the success / done state of the main user flow (the screen shown after the core action completes). If there is no share button or link, add a pre-filled X/Twitter share link:
 ```tsx
 // Pre-filled tweet — edit text to match brand voice from copilot-instructions.md
@@ -73,7 +68,6 @@ Report what was created vs already existed.
 ## Step 1: Audit
 - [ ] `site.ts` has `social` block with real values (no TODOs)
 - [ ] Footer has X/Twitter + GitHub links from `site.social`
-- [ ] Footer has Modryn Studio credit linking to modrynstudio.com
 - [ ] Main flow success/done state has a share link
 - [ ] Educational/FAQ pages have FAQPage JSON-LD
 - [ ] Product screenshots referenced in `site.ts` or content JSON are rendered in the landing page (not just stored in `public/`)

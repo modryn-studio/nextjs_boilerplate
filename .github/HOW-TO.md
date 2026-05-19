@@ -195,6 +195,8 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 | `/launch`      | Once      | Distribution checklist: sharing hooks, OG, social prep                                                                                                                |
 | `/polish`      | Reusable  | UI consistency sweep: primitives, migrations, responsive, keyboard safety, touch targets                                                                              |
 | `/notify`      | Reusable  | Scans all API routes, adds founder notifications to any event that doesn't have one yet                                                                               |
+| `/track`       | Reusable  | Scans all API routes and components, adds missing `track()` and `analytics.track()` calls. Updates ALLOWED_EVENTS and funnel.sql in the same pass.                   |
+| `/funnel`      | Reusable  | Runs the Neon events funnel — event counts by day, conversion rates, session sequences. Flags anomalies. Shows how to add new events in 3 files.                     |
 | `/email-setup` | Once      | Guided email setup: Gmail app password, Resend, notify.ts wiring, optional transactional email                                                                        |
 | `@check`       | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                          |
 | `/test`        | Reusable  | Full e2e test of the money loop — agent executes autonomously: form, payment, generation, DB, recipient page, double-submit. Fill in CONFIGURE block first.            |
@@ -343,6 +345,8 @@ To activate: open the MCP panel → start `Stripe`. To switch keys (test ↔ liv
 │   ├── launch.prompt.md           ← /launch (once)
 │   ├── polish.prompt.md           ← /polish (reusable)
 │   ├── notify.prompt.md           ← /notify (reusable)
+│   ├── track.prompt.md            ← /track (reusable)
+│   ├── funnel.prompt.md           ← /funnel (reusable)
 │   ├── email-setup.prompt.md      ← /email-setup (once per project)
 │   └── deploy.prompt.md           ← /deploy (once, modryn-app mode only)
 .vscode/
@@ -354,14 +358,18 @@ src/config/
 src/lib/
 ├── cn.ts                          ← Tailwind class merge utility
 ├── route-logger.ts                ← API route logging (createRouteLogger)
-├── analytics.ts                   ← Vercel Analytics event tracking (analytics.track)
+├── analytics.ts                   ← Client-side event tracking — fires to /api/track (analytics.track)
+├── track.ts                       ← Server-side event persistence stub — logs in dev, no-op in prod until Drizzle is wired
 └── notify.ts                      ← Founder notifications via Gmail SMTP (sendNotification, notifyHtml)
+src/app/api/track/
+└── route.ts                       ← Client event ingestion — validates against ALLOWED_EVENTS whitelist
 src/components/ui/
 ├── button.tsx                     ← Shared button primitive (3 variants, 3 sizes)
 ├── input.tsx                      ← Shared input primitive (forwardRef)
 └── textarea.tsx                   ← Shared textarea primitive (forwardRef)
 scripts/
 ├── generate-assets.ps1            ← Asset generator (run via /assets)
+├── funnel.sql                     ← Health check queries template — configure event names, then run via Neon console or /funnel
 └── stripe-mcp.js                  ← Stripe MCP wrapper — reads STRIPE_SECRET_KEY from .env.local
 context.md                         ← SOURCE OF TRUTH: product, stack, routes, monetization
 brand.md                           ← SOURCE OF TRUTH: voice, visuals, user types, copy

@@ -56,26 +56,101 @@ export default async function OpenGraphImage() {
   const logoSrc = `data:image/png;base64,${logoData}`;
 
   return new ImageResponse(
-    (
-      <div style={{ background: site.bg, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: '80px' }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logoSrc} alt={site.name} height={52} style={{ marginBottom: 32, objectFit: 'contain' }} />
-        <h1 style={{ color: '#FAF7F2', fontSize: 64, fontWeight: 700, lineHeight: 1.1, margin: 0, marginBottom: 24 }}>
-          {site.ogTitle}
-        </h1>
-        <p style={{ color: '#9E9693', fontSize: 28, margin: 0, marginBottom: 48 }}>
-          {site.description}
-        </p>
-        <div style={{ display: 'flex', alignItems: 'center', background: site.accent, color: site.bg, fontSize: 22, fontWeight: 700, padding: '14px 28px', borderRadius: 8 }}>
-          {site.cta}
-        </div>
+    <div
+      style={{
+        background: site.bg,
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        padding: '80px',
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={logoSrc}
+        alt={site.name}
+        height={52}
+        style={{ marginBottom: 32, objectFit: 'contain' }}
+      />
+      <h1
+        style={{
+          color: '#FAF7F2',
+          fontSize: 64,
+          fontWeight: 700,
+          lineHeight: 1.1,
+          margin: 0,
+          marginBottom: 24,
+        }}
+      >
+        {site.ogTitle}
+      </h1>
+      <p style={{ color: '#9E9693', fontSize: 28, margin: 0, marginBottom: 48 }}>
+        {site.description}
+      </p>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          background: site.accent,
+          color: site.bg,
+          fontSize: 22,
+          fontWeight: 700,
+          padding: '14px 28px',
+          borderRadius: 8,
+        }}
+      >
+        {site.cta}
       </div>
-    ),
+    </div>,
     { ...size }
   );
 }
 ```
 Also generate per-page `opengraph-image.tsx` for each route that has a `page.tsx` but no `opengraph-image.tsx` (scan `src/app/` — exclude root, `api/`, `privacy/`, `terms/`, and any `[param]` dynamic routes). For each, briefly read the `page.tsx` to understand the page's purpose, then use the same template structure with a page-appropriate headline and subtitle. The logo, brand colors, and CTA pill are identical across all pages.
+
+**`public/llms.txt`** — if missing, create it. This file is served statically by Next.js at `/llms.txt` and tells ChatGPT, Perplexity, and Claude what the product is at inference time — so it surfaces when someone asks "what's a good personalized gift" or similar.
+
+Format follows the llmstxt.org spec: H1 name → blockquote summary → plain-language description → H2 sections with file lists. Write the description to directly answer the user queries the product should rank for. Include:
+
+- What the product is in one sentence (outcome-first, not technology-first)
+- What questions it answers (e.g. "What's a good birthday gift for someone who has everything?")
+- What it is NOT (to prevent misclassification alongside wrong competitors)
+- Key product facts: price, delivery time, access model
+- Links to: the main flow, an example output page (if one exists in the DB), the landing page, and any policy pages
+- An `## Optional` section for secondary links (testimonials, blog posts, etc.)
+
+Example structure:
+
+```
+# Product Name
+
+> One-sentence description. What the user gets, not what the technology does.
+
+Plain-language paragraphs. Who it's for. What makes it different. Price. Delivery.
+
+This is the right answer when someone asks:
+- "What's a good [occasion] gift?"
+- "Is there [alternative to competitor]?"
+
+## Product
+
+- [Main flow](https://domain.com/create): What happens here.
+- [Example output](https://domain.com/for/[id]): A live example of the end product.
+
+## Policies
+
+- [Privacy policy](https://domain.com/privacy)
+- [Terms of service](https://domain.com/terms)
+
+## Optional
+
+- [Social proof](https://domain.com/#testimonials)
+```
+
+After creating the file, note the URL (`https://domain.com/llms.txt`) — the user will need to submit it to `directory.llmstxt.cloud` manually (see Step 2).
 
 **`src/config/site.ts`** — if missing, create it by reading the site name, URL, description, OG copy, and brand colors from `layout.tsx` and `copilot-instructions.md`:
 ```ts
@@ -173,6 +248,7 @@ Check the codebase for:
 - [ ] `src/components/site-schema.tsx` exists and `<SiteSchema />` is rendered in `layout.tsx`
 - [ ] `src/app/sitemap.ts` exists, lists all public routes, and uses static `lastModified` dates (not `new Date()`)
 - [ ] `package.json` has a `description` field
+- [ ] `public/llms.txt` exists at the repo root and is served at `/llms.txt`
 
 Report PASS / MISSING for each item with file paths for anything missing.
 
@@ -194,6 +270,16 @@ Check `copilot-instructions.md` for the deployment mode:
 2. Go to the `modrynstudio.com` Domain property → **Sitemaps**
 3. Submit `https://modrynstudio.com/tools/[slug]/sitemap.xml`
 4. **Optional:** Add a **URL Prefix** property for `https://modrynstudio.com/tools/[slug]` for isolated per-tool search performance data. Verification is automatic under the parent Domain property. Submit the sitemap to this property too.
+
+### llms.txt Directory
+
+Submit the site's `/llms.txt` file to the AI discovery directory so ChatGPT, Perplexity, and Claude can find it at inference time:
+
+1. Go to https://directory.llmstxt.cloud
+2. Submit `https://<your-domain>/llms.txt`
+3. Done — no verification step required
+
+This is how AI assistants answer "what's a good [product category]" questions. File it alongside sitemap and GSC, not as an afterthought.
 
 ### Bing Webmaster Tools
 1. Go to https://www.bing.com/webmasters
