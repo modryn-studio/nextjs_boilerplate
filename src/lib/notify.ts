@@ -2,6 +2,15 @@ import nodemailer from 'nodemailer';
 import { env } from '@/lib/env';
 import { site } from '@/config/site';
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /**
  * Send an internal founder notification via Gmail SMTP.
  * Fire-and-forget — never throws. Safe to call without awaiting.
@@ -20,7 +29,9 @@ export async function sendNotification(subject: string, html: string): Promise<v
 
 /** Build a simple monospaced notification email body. */
 export function notifyHtml(title: string, rows: [string, string][]): string {
-  const rowsHtml = rows.map(([k, v]) => `<p><strong>${k}:</strong> ${v}</p>`).join('');
+  const rowsHtml = rows
+    .map(([k, v]) => `<p><strong>${escapeHtml(k)}:</strong> ${v.startsWith('<') ? v : escapeHtml(v)}</p>`)
+    .join('');
   return `
     <div style="font-family: monospace; padding: 20px; max-width: 500px;">
       <h2 style="margin: 0 0 16px;">${title}</h2>

@@ -31,7 +31,7 @@
       "node"
     ]
   },
-  "include": [
+  "inclu
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",

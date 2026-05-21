@@ -93,36 +93,26 @@ If `docs/guide.md` already exists, update it to reflect current state. Remove an
 
 ## Step 7: Update `docs/architecture.md`
 
-Update `docs/architecture.md` to reflect the current state of the AI plumbing. Read the actual source before writing — do not guess.
+Update `docs/architecture.md` to reflect the current state of the project's technical architecture. Read the actual source files before writing — do not guess.
 
-**Read these files:**
+**Discovery — read before writing:**
 
-- `src/app/api/chat/route.ts` — DM route: model, tools, message window, memory fetch
-- `src/app/api/threads/[threadId]/respond/route.ts` — thread respond: model, tools, transcript structure, idempotency
-- `src/lib/tokens.ts` — `assembleContext()` budget and priority order
-- `src/lib/context.ts` — memory fetch and org extraction helpers
-- Latest migration file in `migrations/` — for any schema changes
+- Check `src/app/api/` for route handlers and pipelines
+- Check `src/lib/` for service modules, clients, and utilities
+- Check `src/lib/schema.ts` (or equivalent) for the current DB schema
+- Check `migrations/` or `drizzle.config.ts` for any schema changes
 
-**Update only sections that have actually changed:**
+**Update only sections that have actually changed.** If a section is still accurate, leave it alone.
 
-- Models (if the model strings changed)
-- System prompt priority order (if layers were added/removed/reordered)
-- DM vs Thread message structure (if window size, transcript format, or history logic changed)
-- Web search (if the gate condition, maxUses, or tool name changed)
-- Memory (if triggers, row limits, or table names changed)
-- Thread orchestration (if the client-side loop logic changed)
-- Member IDs (if members were added or removed — query the DB or check migrations)
-- DB schema table list (if new tables were added)
-
-If a genuinely new capability exists in the source files that has no corresponding section in `architecture.md` (e.g. a new route type, a new utility tool, a new memory tier, a new tool integration), add a new minimal section for it. Keep new sections to the same density as existing ones.
+If `docs/architecture.md` does not exist yet, create it with only sections that are true of the current codebase. Do not add placeholder sections for things that don't exist.
 
 **Rules:**
 
-- `architecture.md` covers AI plumbing only: models, system prompts, memory, thread orchestration, DB schema. Stack, conventions, and routes are documented in `copilot-instructions.md` — do not duplicate them here.
+- `architecture.md` documents technical plumbing — AI models, data pipelines, external service integrations, DB schema, error recovery. Stack, conventions, and routes belong in `copilot-instructions.md` — do not duplicate them here.
 - Keep it lean — one or two sentences per section max, tables where they help
-- Do not add commentary or reasoning — just facts about how it's built
+- Do not add commentary or reasoning — just facts about how it is built
 - Do not remove sections that are still accurate
-- Never document something that isn't in the code
+- Never document something that is not in the code
 
 ---
 

@@ -85,16 +85,42 @@ The landing page will be built manually from locked copy. Check `docs/landing-pa
 
 ---
 
-## Wire EmailSignup Component
+## Choose Optional Features
 
-- Check if `src/components/email-signup.tsx` exists. It should already be in the boilerplate.
+Before wiring any optional components, use `vscode_askQuestions` to ask the user which ones they want. Use this exact configuration:
+
+- **header:** `Which optional features do you want wired up?`
+- **question:** `Select everything you want set up now. You can always add them later.`
+- **multiSelect:** true
+- **options:**
+  - `Email signup` — newsletter capture form (`email-signup.tsx` + `/api/feedback` newsletter type + Resend)
+  - `Feedback widget` — floating feedback tab (`feedback-widget.tsx` + `feedback-trigger.tsx`)
+  - `Stripe payment gate` — pay-before-access gate (`pay-gate.tsx` + `/api/checkout`)
+
+Wire **only** the features the user selects. Skip the rest entirely — don't import them, don't reference them in comments.
+
+### If "Email signup" is selected
+
+- Check that `src/components/email-signup.tsx` exists.
 - Add `import EmailSignup from '@/components/email-signup'` to `src/app/page.tsx`
-- Add `<EmailSignup />` inside `<main>` — it can be the only element for now
-- The component posts to `/api/feedback` with `type: 'newsletter'` — this route already exists in the boilerplate.
+- Add `<EmailSignup />` inside `<main>`
+- The component posts to `/api/feedback` with `type: 'newsletter'` — already in the boilerplate.
 - Set placeholder copy in the `waitlist` block in `src/config/site.ts`:
   - `headline: 'Early access'`
   - `subheadline: 'Sign up to be first in line.'`
   - `success: "You're on the list."`
+
+### If "Feedback widget" is selected
+
+- Add `import FeedbackWidget from '@/components/feedback-widget'` to `src/app/layout.tsx`
+- Add `<FeedbackWidget />` as the last child inside `<body>`
+- The mobile trigger (`FeedbackTrigger`) is wired inside the widget — no footer changes needed unless the user asks.
+
+### If "Stripe payment gate" is selected
+
+- Add `import PayGate from '@/components/pay-gate'` wherever the gated content lives.
+- The `/api/checkout` route is already in the boilerplate.
+- Remind the user to set `STRIPE_SECRET_KEY` and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` in `.env.local`.
 
 ---
 
