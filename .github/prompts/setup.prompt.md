@@ -4,6 +4,19 @@ description: Reads context.md and brand.md, then fills in copilot-instructions.m
 agent: agent
 ---
 
+## PREFLIGHT CHECK — Run this before anything else
+
+Read `brand.md`. Scan every field for the text `TBD`.
+
+If any TBD values are found:
+1. **STOP. Do not proceed with /setup.**
+2. List every TBD field and the team member who owns it (e.g. "Color token `Text Primary` — TBD — Rams required").
+3. Tell Luke: "/setup cannot run until these fields are resolved. Run the team member listed above first, then return here."
+
+Only proceed to the steps below when `brand.md` contains zero TBD values.
+
+---
+
 Read the following files from the workspace root:
 
 1. `context.md` — project-specific facts: product name, what it does, who it's for, stack additions, and routes
