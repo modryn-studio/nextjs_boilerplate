@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && git add -A && (git diff --cached --quiet && true || git commit -m 'Auto-backup') && git push -u origin $(git rev-parse --abbrev-ref HEAD) 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
