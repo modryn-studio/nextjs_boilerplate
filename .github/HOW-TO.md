@@ -60,6 +60,9 @@ Every project that reaches this HOW-TO is already greenlit — /new-idea or /clo
    - **Advertising brief:** Ogilvy — `projects/[slug]/deliverables/briefs/`
 
 4. Wire early access signup — email capture, no price gate. CTA language from `brand.md`.
+   - Form with one email input → POST `/api/waitlist` → validate → `sendNotification()` via `src/lib/notify.ts` (nodemailer Gmail SMTP — already wired in the boilerplate)
+   - Store the email in a `waitlist` table in Neon if DB is already set up; otherwise log + notify is enough until the DB is wired
+   - No Resend. No external audience management service. Founder notification = Gmail SMTP.
 
 5. Deploy. Committed products ship to their own domain:
    1. Deploy to Vercel (Pro plan — Hobby prohibits charging money)
