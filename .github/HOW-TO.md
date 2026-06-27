@@ -304,14 +304,35 @@ MCP servers give Copilot access to external tools — Stripe, GitHub, Neon — d
 
 > **Don't add a `github` entry to `.vscode/mcp.json`.** The gallery extension already registers it globally. Adding it again causes duplicate GitHub servers in every project.
 
-**Neon** — add once to your global `mcp.json` (`C:\\Users\\{you}\\AppData\\Roaming\\Code\\User\\mcp.json`):
+**Neon** — two surfaces to wire, once each:
 
+**VS Code** — add to global `mcp.json` (`C:\\Users\\{you}\\AppData\\Roaming\\Code\\User\\mcp.json`):
 ```json
 "Neon": {
   "type": "http",
   "url": "https://mcp.neon.tech/mcp",
   "headers": { "Authorization": "Bearer YOUR_NEON_API_KEY" }
 }
+```
+
+**Claude Code desktop** — run one of these (in order of preference):
+```bash
+# Option 1 — plugin (skills + MCP bundled, best)
+claude plugin install neon@claude-plugins-official
+
+# Option 2 — neonctl init (OAuth + API key + MCP config in one command)
+npx neonctl@latest init
+
+# Option 3 — CLI shortcut (same as editing claude_desktop_config.json manually)
+claude mcp add --transport http neon https://mcp.neon.tech/mcp
+```
+Verify it's connected: start Claude Code and run `/mcp` — Neon should appear in the list.
+
+**neonctl env workflow (replaces manual .env.local writing):**
+```bash
+neonctl link          # link project once — writes .neon context file
+neonctl checkout dev  # create/switch branch + auto-writes env vars to .env
+neonctl env pull      # re-pull env vars from current branch anytime
 ```
 
 Get your Neon API key at [neon.tech](https://neon.tech) → Account → API Keys.
