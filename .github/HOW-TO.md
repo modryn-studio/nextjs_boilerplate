@@ -28,61 +28,47 @@ One-time setup. Run these in order when starting a new project.
    ```
    From this point: never commit directly to `main`. Build on `dev`. Cut short-lived `feat/*` branches from `dev` for larger features if you want isolation. When `dev` is stable and shippable, open a PR to merge into `main` (= a release).
 4. Run `npm install`
-5. **Discovery** — two paths:
-   - **Starting from scratch** → Open chat (`Ctrl+Alt+I`), select **Agent** mode, pick **@prebuild**. Describe the idea. It researches, validates, and fills `context.md` + `brand.md` when you say "fill it in."
-   - **Docs already written** → Drop your pre-filled `context.md` and `brand.md` into the project root, replacing the stubs.
-6. Run `/validate` — web-searches competitors, user pain, SEO opportunity, and brand positioning. Go back and forth. Update `context.md` and `brand.md` based on findings.
-7. Type `/setup` — reads source docs, fills in `copilot-instructions.md` + `src/config/site.ts`. Start the dev server (`Ctrl+Shift+B`) and check the basic landing page in your browser. **If `/setup` blocks on a TBD:** return to modryn-hq, run `/threads design` (Jobs → Rams → Ogilvy) to resolve the open item, update `brand.md` with the approved value, then re-run `/setup`.
-8. Build the logomark — three components in order:
+5. **Source docs** — `context.md` and `brand.md` are pre-written from /new-idea or /clone-and-own in modryn-hq. Drop them into the project root, replacing the stubs.
+6. Type `/setup` — reads source docs, fills in `copilot-instructions.md` + `src/config/site.ts`. Start the dev server (`Ctrl+Shift+B`) and check the basic landing page in your browser. **If `/setup` blocks on a TBD:** return to modryn-hq, run `/threads design` (Jobs → Rams → Ogilvy) to resolve the open item, update `brand.md` with the approved value, then re-run `/setup`.
+7. Build the logomark — three components in order:
    - **Icon mark** — generate via Nanobanana 2 in Recraft.ai (thinking mode ON for geometric precision). Vectorize in Recraft, export as PNG 1024×1024 with transparent background. Save to `public/brand/logomark.png`. Pad if needed: `magick logomark.png -gravity center -background none -extent 1024x1024 logomark.png`
    - **Wordmark** — code as an SVG component using the brand font, exact color, and letter-spacing from `brand.md`. Never AI-generate the wordmark.
    - **Lockup** (icon + wordmark together) — compose in code.
-9. Run `/assets` — generates all favicons and icons. For the banner, the script will tell you it's missing and give you the commands. **Before running those commands: invoke Rams** (`modryn-hq/team/system-prompts/dieter-rams.md`) for a banner spec — font, mark size, tagline, color assignments. Then update the BANNER CONFIG block in `scripts/generate-banner.mjs`, install `@fontsource/<your-font>`, and run `npm run generate-banner`. Commit. Verify the favicon shows in the browser tab.
-10. Run `/deps` — validates all dependencies against live docs, surfaces breaking API changes.
+8. Run `/assets` — generates all favicons and icons. For the banner, the script will tell you it's missing and give you the commands. **Before running those commands: invoke Rams** (`modryn-hq/team/system-prompts/dieter-rams.md`) for a banner spec — font, mark size, tagline, color assignments. Then update the BANNER CONFIG block in `scripts/generate-banner.mjs`, install `@fontsource/<your-font>`, and run `npm run generate-banner`. Commit. Verify the favicon shows in the browser tab.
+9. Run `/deps` — validates all dependencies against live docs, surfaces breaking API changes.
 
 > After setup, **never edit `copilot-instructions.md` or `site.ts` directly**. Edit the source docs → run `/update`.
 
 ---
 
-## Phase 2: Validate Before You Build
+## Phase 2: Build the Landing Page
 
-Fish for demand before writing product code. The video and landing page are the fishing rod. Pre-orders are the fish.
+Every project that reaches this HOW-TO is already greenlit — /new-idea or /clone-and-own in modryn-hq produced the Ogilvy brief, Rams visual direction, and brand.md copy. The landing page ships before product code. Every day it's live, Google is indexing your domain.
 
-**Build your public footprint:**
+**Optional — modrynstudio.com footprint:**
 
-1. Run `/tool` — registers the tool on modrynstudio.com with `status: "building"`. Merge the PR right away.
-2. Run `/log` — first build log post. Document the idea, the origin, the plan. Merge the PR.
+1. Run `/tool` — registers the project with `status: "building"`. Defer if you're not actively maintaining the site.
+2. Run `/log` — first build log post. Defer for the same reason.
 
-> Every day the listing exists is a day Google can index it. Every log post is content that compounds.
+> If you run these: merge the PRs and move on immediately. Don't let this become a distraction.
 
-**Build the validation instrument:**
+**Build the landing page:**
 
-3. Build a demo of the core deliverable — a sample output, a generated example, a screenshot. Whatever the buyer would actually receive. You do not need the full product built. You need something real to show.
-4. Record a 30–45 second video per Ogilvy's script. Phone shot is fine. Ship within 48 hours of greenlight.
-5. Build the pre-order landing page: visible price ($9–$29), one CTA, Stripe checkout wired. **Go live the same day as the video.**
+3. Build from what you already have — don't invent anything new:
+   - **Hero, subline, CTA:** `brand.md` → Copy Examples section
+   - **Visual register:** Rams' approved critique — `projects/[slug]/deliverables/critiques/`
+   - **Advertising brief:** Ogilvy — `projects/[slug]/deliverables/briefs/`
 
-> The landing page is not polish — it is the demand test.
+4. Wire early access signup — email capture, no price gate. CTA language from `brand.md`.
 
-**Measure:**
+5. Deploy. Committed products ship to their own domain:
+   1. Deploy to Vercel (Pro plan — Hobby prohibits charging money)
+   2. Point DNS to Vercel
+   3. Set `mode: standalone-domain` and `url:` in `context.md` → run `/update`
 
-6. Watch for 7 days. Micro-signals first (saves, shares, watch completion), then pre-orders. **50 pre-orders = greenlight to build.** Zero signal = park it cleanly and move on. (Paul Buchheit: "Go sell the product ASAP before wasting time building it.")
-7. **Schedule calls at 5+ pre-orders.** One 20-minute call with a real buyer reveals more than 100 passive signups. Ask: what's their current system, what have they tried, what made them act?
+**After it's live:**
 
-**Deploy — two paths based on your deployment mode:**
-
-- **Standalone domain** (the product earns its own brand) →
-  1. Purchase domain
-  2. Deploy to Vercel (Pro plan if commercial — Hobby prohibits charging money)
-  3. Point DNS to Vercel
-  4. Set `mode: standalone-domain` and `url:` in `context.md` → run `/update`
-
-- **Subdirectory on modrynstudio.com** (default for most tools) →
-  1. Deploy to Vercel (note the `.vercel.app` URL) — any live page is enough.
-  2. Run `/deploy` from this repo — pre-deploy checklist, outputs config for modryn-studio-v2.
-  3. Switch to **modryn-studio-v2** and apply the output → adds the rewrite `modrynstudio.com/tools/[slug]/*` → your Vercel URL.
-  4. Set `mode: modryn-app` and `url:` in `context.md` → run `/update`
-
-  > `status: "building"` + active rewrite is the standard state during development. When the real product ships at the same Vercel URL, the rewrite keeps working — no changes needed in modryn-studio-v2.
+6. Talk to your first 5 signups before writing product code. One 20-minute call with a real early user beats 100 passive email signups.
 
 ---
 
@@ -189,7 +175,7 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 | -------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/setup`       | Once      | Fills `copilot-instructions.md` + `site.ts` from source docs                                                                                                          |
 | `/update`      | Reusable  | Cascades source doc edits into derived files                                                                                                                          |
-| `/validate`    | Reusable  | Reads `context.md`, `brand.md`, `strategy.md` + web-searches to validate. **Agent mode only.** Phase 1: run open-ended. Phase 4+: add focus question in same message. |
+| `/validate`    | Reusable  | Reads `context.md`, `brand.md`, `strategy.md` + web-searches to validate. **Agent mode only.** Add a focus question in the same message.                              |
 | `/assets`      | Reusable  | Generates favicons, icons, banner from logomark                                                                                                                       |
 | `/tool`        | Reusable  | Registers/updates tool on modrynstudio.com (`building` → `live`)                                                                                                      |
 | `/log`         | Reusable  | Drafts a build log post — run at every milestone                                                                                                                      |
@@ -223,10 +209,9 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 >
 > There's no way to set this programmatically — it's a per-session UI setting only. No frontmatter field, no hook, no command can trigger it. The step is: open Chat → switch to Bypass Approvals → invoke `@check`.
 
-### `/validate` — Two Modes
+### `/validate` — Focus Mode
 
-1. **Setup validation** (Phase 1): "validate my market positioning" — broad, uses docs + web search
-2. **Focused validation** (Phase 4+): "validate my competitor positioning and intake approach" — you tell it what to examine
+Broad market validation is done in modryn-hq before any project reaches this HOW-TO. Use `/validate` here for focused questions during build: competitor positioning, a specific feature approach, pricing sensitivity. Always add the focus question in the same message as the command.
 
 ### VS Code Modes
 
