@@ -32,8 +32,11 @@ One-time setup. Run these in order when starting a new project.
    - **Starting from scratch** → Open chat (`Ctrl+Alt+I`), select **Agent** mode, pick **@prebuild**. Describe the idea. It researches, validates, and fills `context.md` + `brand.md` when you say "fill it in."
    - **Docs already written** → Drop your pre-filled `context.md` and `brand.md` into the project root, replacing the stubs.
 6. Run `/validate` — web-searches competitors, user pain, SEO opportunity, and brand positioning. Go back and forth. Update `context.md` and `brand.md` based on findings.
-7. Type `/setup` — reads source docs, fills in `copilot-instructions.md` + `src/config/site.ts`. Start the dev server (`Ctrl+Shift+B`) and check the basic landing page in your browser.
-8. Create or drop your logomark at `public/brand/logomark.png`. The file must be 1024×1024 — use ImageMagick to pad if needed: `magick logomark.png -gravity center -background none -extent 1024x1024 logomark.png`
+7. Type `/setup` — reads source docs, fills in `copilot-instructions.md` + `src/config/site.ts`. Start the dev server (`Ctrl+Shift+B`) and check the basic landing page in your browser. **If `/setup` blocks on a TBD:** return to modryn-hq, run `/threads design` (Jobs → Rams → Ogilvy) to resolve the open item, update `brand.md` with the approved value, then re-run `/setup`.
+8. Build the logomark — three components in order:
+   - **Icon mark** — generate via Nanobanana 2 in Recraft.ai (thinking mode ON for geometric precision). Vectorize in Recraft, export as PNG 1024×1024 with transparent background. Save to `public/brand/logomark.png`. Pad if needed: `magick logomark.png -gravity center -background none -extent 1024x1024 logomark.png`
+   - **Wordmark** — code as an SVG component using the brand font, exact color, and letter-spacing from `brand.md`. Never AI-generate the wordmark.
+   - **Lockup** (icon + wordmark together) — compose in code.
 9. Run `/assets` — generates all favicons, icons, and banner. Push to `dev`. Then verify the favicon shows up in the browser tab.
 10. Run `/deps` — validates all dependencies against live docs, surfaces breaking API changes.
 
