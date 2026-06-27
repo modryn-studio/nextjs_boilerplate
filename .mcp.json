@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "stripe": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "scripts/stripe-mcp.js"
+      ],
+      "env": {}
+    }
+  }
+}

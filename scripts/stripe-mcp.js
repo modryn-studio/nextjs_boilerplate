@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 // Reads STRIPE_SECRET_KEY from .env.local and spawns the Stripe MCP server.
 // Safe to commit — no keys are stored here.
 const fs = require('fs');
