@@ -323,8 +323,9 @@ claude plugin install neon@claude-plugins-official
 # Option 2 — neonctl init (OAuth + API key + MCP config in one command)
 npx neonctl@latest init
 
-# Option 3 — CLI shortcut (same as editing claude_desktop_config.json manually)
-claude mcp add --transport http neon https://mcp.neon.tech/mcp
+# Option 3 — CLI (writes to ~/.claude.json, NOT claude_desktop_config.json — correct approach)
+# --scope user makes it available across all sessions; header must come after the URL
+claude mcp add --transport http --scope user neon https://mcp.neon.tech/mcp --header "Authorization: Bearer YOUR_NEON_API_KEY"
 ```
 Verify it's connected: start Claude Code and run `/mcp` — Neon should appear in the list.
 
