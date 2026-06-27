@@ -131,7 +131,25 @@ Run the asset generator to produce all favicons, icons, OG image, and README ban
    > - Android "Add to Home Screen": uses manifest icon from `src/app/icon.png`. ✅
    > - `src/app/icon.png` must remain — Next.js uses it to auto-generate the webmanifest.
 
-7. Write `README.md` -- overwrite the entire file with the project README following the `## README Standard` format from `.github/copilot-instructions.md`:
+7. **Banner — spec first, then generate.** The asset script does NOT auto-generate the banner. Follow this process every project:
+
+   a. **Invoke Rams** (read `modryn-hq/team/system-prompts/dieter-rams.md`, share `brand.md` and a description of the logomark). Ask for a 1280×320 banner spec: font family and weights, mark size, tagline copy, color assignments.
+
+   b. **Update `scripts/generate-banner.mjs`** — fill the BANNER CONFIG block at the top with Rams' output: `FONT_FAMILY`, `FONTSOURCE_PKG`, `FONT_WEIGHT_NAME`, `FONT_WEIGHT_TAG`, `MARK_SIZE`, `TAGLINE`, `COLORS`.
+
+   c. **Install the font** (skip if already installed):
+      ```powershell
+      npm install --save-dev @fontsource/<FONTSOURCE_PKG>
+      ```
+
+   d. **Run the generator:**
+      ```powershell
+      npm run generate-banner
+      ```
+
+   Verify the output (`public/brand/banner.png`) looks correct. Re-run with adjusted CONFIG values if proportions are off.
+
+8. Write `README.md` -- overwrite the entire file with the project README following the `## README Standard` format from `.github/copilot-instructions.md`:
    - Banner image line: `![{site.name}](public/brand/banner.png)`
    - H1: product name only
    - Tagline: one sentence -- what the user gets, outcome-focused, no buzzwords
@@ -140,9 +158,9 @@ Run the asset generator to produce all favicons, icons, OG image, and README ban
    - Stack line: read `package.json` dependencies for the core tech list
    - Nothing else
 
-8. Commit the generated assets and README:
+9. Commit the generated assets and README:
    ```powershell
-   git add public/ src/app/apple-icon.png README.md
+   git add public/ src/app/apple-icon.png scripts/generate-banner.mjs README.md
    git commit -m "assets: generate favicons, icons, banner, and README"
    ```
 

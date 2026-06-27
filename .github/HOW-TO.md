@@ -37,7 +37,7 @@ One-time setup. Run these in order when starting a new project.
    - **Icon mark** — generate via Nanobanana 2 in Recraft.ai (thinking mode ON for geometric precision). Vectorize in Recraft, export as PNG 1024×1024 with transparent background. Save to `public/brand/logomark.png`. Pad if needed: `magick logomark.png -gravity center -background none -extent 1024x1024 logomark.png`
    - **Wordmark** — code as an SVG component using the brand font, exact color, and letter-spacing from `brand.md`. Never AI-generate the wordmark.
    - **Lockup** (icon + wordmark together) — compose in code.
-9. Run `/assets` — generates all favicons, icons, and banner. Push to `dev`. Then verify the favicon shows up in the browser tab.
+9. Run `/assets` — generates all favicons and icons. For the banner, the script will tell you it's missing and give you the commands. **Before running those commands: invoke Rams** (`modryn-hq/team/system-prompts/dieter-rams.md`) for a banner spec — font, mark size, tagline, color assignments. Then update the BANNER CONFIG block in `scripts/generate-banner.mjs`, install `@fontsource/<your-font>`, and run `npm run generate-banner`. Commit. Verify the favicon shows in the browser tab.
 10. Run `/deps` — validates all dependencies against live docs, surfaces breaking API changes.
 
 > After setup, **never edit `copilot-instructions.md` or `site.ts` directly**. Edit the source docs → run `/update`.
@@ -244,10 +244,18 @@ Drop your logomark at `public/brand/logomark.png` (1024×1024, transparent backg
 
 The script auto-detects whether your mark is colored or grayscale and generates the correct light/dark favicon pair.
 
+**Banner generation (required — not auto-generated):**
+
+The asset script does not auto-generate the banner with ImageMagick — Arial-Bold text rendering is wrong for brand work. The process every project:
+
+1. **Invoke Rams** for a spec: font, mark size, tagline, colors
+2. **Update `scripts/generate-banner.mjs` BANNER CONFIG block** with the spec values
+3. `npm install --save-dev @fontsource/<your-font>` (Google Fonts serves WOFF2; Satori needs WOFF — use @fontsource)
+4. `npm run generate-banner`
+
 **Optional overrides:**
 
 - `public/brand/logomark-dark.png` — hand-crafted dark favicon (skips auto-inversion)
-- `public/brand/banner.png` — 1280×320 README header (auto-generated if absent)
 
 **What gets generated:**
 

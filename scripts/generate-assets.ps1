@@ -154,13 +154,19 @@ Write-Host "  + public/icon-dark.png"
 if (Test-Path $banner) {
     Write-Host "  ~ public/brand/banner.png (skipped - file already exists)"
 } else {
-    if (-not (Test-Path "public\brand")) { New-Item -ItemType Directory -Path "public\brand" | Out-Null }
-    magick -size 1280x320 xc:"$bgColor" `
-        '(' $logomark -background none -trim +repage $negateFrag -resize 160x160 ')' `
-        -gravity West -geometry +100+0 -composite `
-        -gravity West -font "Arial-Bold" -pointsize 72 -fill "$textColor" -annotate +300+0 $siteName `
-        $banner
-    Write-Host "  + public/brand/banner.png (auto-generated)"
+    Write-Host ""
+    Write-Host "  BANNER: public/brand/banner.png not found." -ForegroundColor Yellow
+    Write-Host "  Before generating, invoke Rams for a banner spec:" -ForegroundColor Yellow
+    Write-Host "    - Font family + weights" -ForegroundColor DarkGray
+    Write-Host "    - Mark size (adjust if logomark PNG has large whitespace padding)" -ForegroundColor DarkGray
+    Write-Host "    - Tagline copy" -ForegroundColor DarkGray
+    Write-Host "    - Colors (should match site.ts + globals.css tokens)" -ForegroundColor DarkGray
+    Write-Host "  Then update the BANNER CONFIG block in scripts/generate-banner.mjs" -ForegroundColor Yellow
+    Write-Host "  and install the @fontsource package for your project font." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "  npm install --save-dev @fontsource/<your-font>" -ForegroundColor Cyan
+    Write-Host "  npm run generate-banner" -ForegroundColor Cyan
+    Write-Host ""
 }
 
 # -- palette.png - brand color swatches ----------------------------------------
