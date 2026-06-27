@@ -43,7 +43,7 @@ One-time setup. Run these in order when starting a new project.
 
 ## Phase 2: Build the Landing Page
 
-Every project that reaches this HOW-TO is already greenlit — /new-idea or /clone-and-own in modryn-hq produced the Ogilvy brief, Rams visual direction, and brand.md copy. The landing page ships before product code. Every day it's live, Google is indexing your domain.
+Every project that reaches this HOW-TO is already greenlit — /new-idea or /clone-and-own in modryn-hq produced the Ogilvy brief, Rams visual direction, and brand.md copy. The landing page ships before product code. Deploy to your domain immediately — every day it's live, Google is indexing. Hold the public announcement until the first working product milestone ships.
 
 **Optional — modrynstudio.com footprint:**
 
@@ -68,7 +68,9 @@ Every project that reaches this HOW-TO is already greenlit — /new-idea or /clo
 
 **After it's live:**
 
-6. Talk to your first 5 signups before writing product code. One 20-minute call with a real early user beats 100 passive email signups.
+6. **Private first — no public announcement yet.** Share the URL via direct links only (DMs to targeted community members). Your firsthand user research was already done in the gold standard step in modryn-hq — you don't need conversations with strangers to validate demand. The gold standard IS the validation.
+
+7. **Go public when the first functional step ships.** Announce on socials, submit to Product Hunt, post in communities — only after something real works, not just the landing page. That's when attention converts to signups that matter.
 
 ---
 
