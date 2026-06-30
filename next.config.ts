@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   // basePath is filled in by /setup from the URL field in context.md.
   // Format: '/tools/your-slug'
   // Must match the source path in modryn-studio-v2's next.config.ts rewrites().
+  // Remove entirely for standalone-domain or standalone-subdomain modes.
   basePath: '/tools/TODO_SLUG',
 };
 
