@@ -106,7 +106,7 @@ Before wiring any optional components, use `vscode_askQuestions` to ask the user
 - **question:** `Select everything you want set up now. You can always add them later.`
 - **multiSelect:** true
 - **options:**
-  - `Email signup` — newsletter capture form (`email-signup.tsx` + `/api/feedback` newsletter type + Resend)
+  - `Email signup` — newsletter capture form (`email-signup.tsx` + `/api/feedback` newsletter type + Gmail SMTP notification)
   - `Feedback widget` — floating feedback tab (`feedback-widget.tsx` + `feedback-trigger.tsx`)
   - `Stripe payment gate` — pay-before-access gate (`pay-gate.tsx` + `/api/checkout`)
 

@@ -62,7 +62,7 @@ Every project that reaches this HOW-TO is already greenlit — /new-idea or /clo
 4. Wire early access signup — email capture, no price gate. CTA language from `brand.md`.
    - Form with one email input → POST `/api/waitlist` → validate → `sendNotification()` via `src/lib/notify.ts` (nodemailer Gmail SMTP — already wired in the boilerplate)
    - Store the email in a `waitlist` table in Neon if DB is already set up; otherwise log + notify is enough until the DB is wired
-   - No Resend. No external audience management service. Founder notification = Gmail SMTP.
+   - No third-party email service. Founder notification = Gmail SMTP, always.
 
 5. Deploy. Committed products ship to their own domain:
    1. Deploy to Vercel (Pro plan — Hobby prohibits charging money)
@@ -191,7 +191,7 @@ You have a working core feature. Now loop: ship → validate → distribute → 
 | `/notify`      | Reusable  | Scans all API routes, adds founder notifications to any event that doesn't have one yet                                                                               |
 | `/track`       | Reusable  | Scans all API routes and components, adds missing `track()` and `analytics.track()` calls. Updates ALLOWED_EVENTS and funnel.sql in the same pass.                   |
 | `/funnel`      | Reusable  | Runs the Neon events funnel — event counts by day, conversion rates, session sequences. Flags anomalies. Shows how to add new events in 3 files.                     |
-| `/email-setup` | Once      | Guided email setup: Gmail app password, Resend, notify.ts wiring, optional transactional email                                                                        |
+| `/email-setup` | Once      | Guided email setup: Gmail app password, notify.ts wiring, optional transactional email via nodemailer                                                                 |
 | `@check`       | Reusable  | Quality gate: bugs, secrets, lint, build → auto-fixes, commits. Never pushes                                                                                          |
 | `/test`        | Reusable  | Full e2e test of the money loop — agent executes autonomously: form, payment, generation, DB, recipient page, double-submit. Fill in CONFIGURE block first.            |
 | `/issues`      | Reusable  | Syncs `docs/issues.md` from GitHub live — run before planning sessions or after a batch of issue changes                                                               |
@@ -273,12 +273,12 @@ Or run directly (requires [ImageMagick](https://imagemagick.org)):
 
 ### Email Setup
 
-Two services, two jobs:
+One service, every job — nodemailer + Gmail SMTP:
 
-| Service                     | Job                                                                         |
-| --------------------------- | --------------------------------------------------------------------------- |
-| **Gmail SMTP (nodemailer)** | Founder notifications — you get an email when something happens             |
-| **Resend**                  | Audience management — signups added to your contact list, tagged by project |
+| Function                                   | Job                                                                |
+| ------------------------------------------- | ------------------------------------------------------------------- |
+| `sendNotification()` (`src/lib/notify.ts`) | Founder notifications — you get an email when something happens     |
+| `sendUserEmail()` (`src/lib/notify.ts`)    | User-facing transactional email (order confirmation, magic link)    |
 
 **Env vars to set** (copy from `.env.local.example`):
 
@@ -286,13 +286,10 @@ Two services, two jobs:
 GMAIL_USER=you@gmail.com
 GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx   # Gmail app password — not your account password
 FEEDBACK_TO=you@gmail.com               # Where notifications land (defaults to GMAIL_USER)
-RESEND_API_KEY=re_xxxx
-RESEND_SEGMENT_ID=                       # optional — tags signups to a named Resend segment
-RESEND_FROM_EMAIL=                       # for user-facing transactional email
 NEXT_PUBLIC_SITE_URL=                    # used to build links inside emails
 ```
 
-Run `/email-setup` for a guided walkthrough — checks what's set, walks through Gmail app password and Resend, wires `notify.ts` into routes that are missing notifications, and sets up transactional email templates if needed.
+Run `/email-setup` for a guided walkthrough — checks what's set, walks through the Gmail app password, wires `notify.ts` into routes that are missing notifications, and sets up transactional email templates if needed. Never Resend, never SendGrid — nodemailer + Gmail SMTP only, per studio convention.
 
 Run `/notify` after adding new routes to wire notifications into any event that doesn't have one yet.
 
@@ -383,7 +380,7 @@ src/lib/
 ├── route-logger.ts                ← API route logging (createRouteLogger)
 ├── analytics.ts                   ← Client-side event tracking — fires to /api/track (analytics.track)
 ├── track.ts                       ← Server-side event persistence stub — logs in dev, no-op in prod until Drizzle is wired
-└── notify.ts                      ← Founder notifications via Gmail SMTP (sendNotification, notifyHtml)
+└── notify.ts                      ← Gmail SMTP email (sendNotification, sendUserEmail, notifyHtml)
 src/app/api/track/
 └── route.ts                       ← Client event ingestion — validates against ALLOWED_EVENTS whitelist
 src/components/ui/

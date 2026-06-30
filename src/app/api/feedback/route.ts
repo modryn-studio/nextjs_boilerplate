@@ -1,7 +1,6 @@
 import { createRouteLogger } from '@/lib/route-logger';
 import { env } from '@/lib/env';
 import nodemailer from 'nodemailer';
-import { Resend } from 'resend';
 import { site } from '@/config/site';
 import { after } from 'next/server';
 
@@ -83,7 +82,7 @@ export async function POST(req: Request): Promise<Response> {
       return log.end(ctx, Response.json({ error: 'Email service unavailable' }, { status: 503 }));
     }
 
-    // Respond immediately — fire Gmail + Resend in parallel after the response
+    // Respond immediately — send the Gmail notification after the response
     after(async () => {
       const subjectMap: Record<FeedbackType, string> = {
         newsletter: `📬 [${site.name}] New signup: ${body.email}`,
@@ -91,7 +90,7 @@ export async function POST(req: Request): Promise<Response> {
         bug: `🐛 [${site.name}] Bug report${body.email ? ` from ${body.email}` : ''}`,
       };
 
-      const emailPromise = nodemailer
+      await nodemailer
         .createTransport({ service: 'gmail', auth: { user: gmailUser, pass: gmailPass } })
         .sendMail({
           from: gmailUser,
@@ -102,34 +101,6 @@ export async function POST(req: Request): Promise<Response> {
         })
         .then(() => log.info(ctx.reqId, 'Email sent', { to: feedbackTo }))
         .catch((err) => log.warn(ctx.reqId, 'Email send failed', { error: err }));
-
-      const resendPromise =
-        body.type === 'newsletter'
-          ? (() => {
-              const resendKey = env.RESEND_API_KEY;
-              if (!resendKey) {
-                log.warn(ctx.reqId, 'Resend not configured — signup not saved to contacts');
-                return Promise.resolve();
-              }
-              const resend = new Resend(resendKey);
-              const segmentId = env.RESEND_SEGMENT_ID;
-              return resend.contacts
-                .create({
-                  email: body.email!,
-                  unsubscribed: false,
-                  ...(segmentId && { segments: [{ id: segmentId }] }),
-                  properties: { source: site.name },
-                })
-                .then(() =>
-                  log.info(ctx.reqId, 'Resend contact created', { segmentId, source: site.name }),
-                )
-                .catch((err) =>
-                  log.warn(ctx.reqId, 'Resend contact creation failed', { error: err }),
-                );
-            })()
-          : Promise.resolve();
-
-      await Promise.all([emailPromise, resendPromise]);
     });
 
     return log.end(ctx, Response.json({ ok: true }));

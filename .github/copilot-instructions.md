@@ -19,7 +19,7 @@ basePath: <!-- /tools/your-slug   (empty for standalone modes) -->
 - Vercel for deployment
 - Vercel Analytics `<Analytics />` in `layout.tsx` — zero-config pageview tracking, no env vars needed
 - `@/lib/analytics.ts` — no-op stub with named methods; wire in a real provider here if needed
-<!-- TODO: add project-specific services (e.g. Resend, Stripe, Prisma, Supabase) -->
+<!-- TODO: add project-specific services (e.g. Stripe, Prisma, Supabase). Email is nodemailer + Gmail SMTP via src/lib/notify.ts — never Resend. -->
 
 ## Project Structure
 ```

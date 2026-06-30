@@ -63,14 +63,14 @@ basePath: <!-- /tools/your-slug   (leave empty for standalone modes) -->
      [Entry point] → [Core action] → [Payment] → [Fulfillment trigger] → [Delivery] → [Shareable output]
 
      Example:
-     Landing page → /create intake → Stripe checkout ($9.99) → Admin notified → Admin fulfills → Resend email → /result/[id] shareable page
+     Landing page → /create intake → Stripe checkout ($9.99) → Admin notified → Admin fulfills → Gmail SMTP email → /result/[id] shareable page
 
      Rule: do not polish any one piece until this loop has run once with a real order.
 -->
 
 ## Stack Additions
 <!-- Any services beyond the boilerplate defaults (Next.js, Tailwind, Vercel, GA4)?
-     e.g. Resend for email, Stripe for payments, Prisma + Supabase for database -->
+     Email is already nodemailer + Gmail SMTP via src/lib/notify.ts — never Resend. e.g. Stripe for payments, Prisma + Supabase for database -->
 
 ## Project Structure Additions
 <!-- Any directories beyond /app, /components, /lib?

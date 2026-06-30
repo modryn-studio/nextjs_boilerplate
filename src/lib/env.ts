@@ -12,10 +12,6 @@ const schema = z.object({
   GMAIL_APP_PASSWORD: z.string().optional(),
   FEEDBACK_TO: z.string().optional(),
 
-  RESEND_API_KEY: z.string().optional(),
-  RESEND_FROM_EMAIL: z.string().optional(),
-  RESEND_SEGMENT_ID: z.string().optional(),
-
   NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
 });
 

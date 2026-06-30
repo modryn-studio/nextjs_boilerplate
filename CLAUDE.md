@@ -1,6 +1,6 @@
 # nextjs_boilerplate — Claude Code Guide
 
-Production-wired Next.js starter for committed Modryn products. Pre-built: Stripe (checkout + webhook), Resend (email notifications), Vercel Analytics, and a feedback widget. Use this when the product is committed and needs the money loop from day one.
+Production-wired Next.js starter for committed Modryn products. Pre-built: Stripe (checkout + webhook), nodemailer + Gmail SMTP (email notifications), Vercel Analytics, and a feedback widget. Use this when the product is committed and needs the money loop from day one.
 
 **When to use this vs modryn-boilerplate:**
 - `nextjs_boilerplate` — committed product; needs payments, email, analytics. Start here.
@@ -41,7 +41,6 @@ These are already built — configure, don't rebuild:
 | Stripe webhook | `src/app/api/stripe/webhook/route.ts` | Verify `STRIPE_WEBHOOK_SECRET` is set; add subscription-specific event handling |
 | PayGate (one-time payment gate) | `src/components/PayGate.tsx` | localStorage-based — only for one-time purchases. Replace with auth-gated routes for subscriptions |
 | Email notifications | `src/lib/notify.ts` | Set `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `FEEDBACK_TO` in `.env.local` |
-| Resend (audience) | wired in checkout | Set `RESEND_API_KEY`, `RESEND_SEGMENT_ID` |
 | Vercel Analytics | `src/app/layout.tsx` | Already imported via `<Analytics />` — just deploy to Vercel |
 | Feedback widget | present | Sends to `FEEDBACK_TO` email on submission |
 | Client analytics | `src/lib/analytics.ts` | Fires `analytics.track()` to `/api/track` — extend `ALLOWED_EVENTS` per project |

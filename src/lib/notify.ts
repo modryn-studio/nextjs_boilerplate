@@ -27,6 +27,21 @@ export async function sendNotification(subject: string, html: string): Promise<v
     .catch(() => {});
 }
 
+/**
+ * Send a user-facing transactional email via Gmail SMTP (order confirmation,
+ * delivery link, magic link, etc.). Fire-and-forget — never throws.
+ */
+export async function sendUserEmail(to: string, subject: string, html: string): Promise<void> {
+  const gmailUser = env.GMAIL_USER;
+  const gmailPass = env.GMAIL_APP_PASSWORD;
+  if (!gmailUser || !gmailPass || !to) return;
+
+  await nodemailer
+    .createTransport({ service: 'gmail', auth: { user: gmailUser, pass: gmailPass } })
+    .sendMail({ from: gmailUser, to, subject, html })
+    .catch(() => {});
+}
+
 /** Build a simple monospaced notification email body. */
 export function notifyHtml(title: string, rows: [string, string][]): string {
   const rowsHtml = rows

@@ -39,7 +39,7 @@ Packages to always validate if present:
 | `tailwindcss` | "Tailwind CSS v4 upgrade guide" - @theme block, config file removal, utility changes |
 | `react` / `react-dom` | "React 19 migration guide" - hooks changes, Server Components, use() |
 | `stripe` | "Stripe Node.js changelog" + "Stripe Checkout Session" - session creation API, metadata limits, webhook verification |
-| `resend` | "Resend Node.js SDK changelog" - send API, audience/contacts API |
+| `nodemailer` | "Nodemailer changelog" - transport config, Gmail SMTP / app password requirements |
 | `openai` | "OpenAI Node.js SDK v4 migration" - chat completions API, structured output, streaming |
 | `@anthropic-ai/sdk` | "Anthropic SDK changelog" - messages API, model names |
 | Perplexity | "Perplexity API documentation" - current endpoint, auth, response format |
